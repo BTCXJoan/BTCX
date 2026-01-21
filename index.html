@@ -1,12 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>BTCX</title>
+  <meta charset="UTF-8">
+  <title>BTCX – Acceso Bitcoin</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0e0e0e;
+      color: #ffffff;
+      max-width: 700px;
+      margin: auto;
+      padding: 40px;
+    }
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .box {
+      border: 1px solid #333;
+      padding: 20px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>BTCX</h1>
-  <p>BTCX is a Bitcoin-focused access token with on-chain staking on Polygon.</p>
-  <p>This website is an informational placeholder.</p>
+
+<h1>BTCX</h1>
+<p>Acceso a contenido avanzado sobre Bitcoin mediante staking on-chain.</p>
+
+<button id="connectBtn">Conectar wallet</button>
+
+<div id="status" class="box"></div>
+
+<script>
+  const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+
+  const stakingABI = [
+    "function hasAccess(address user) view returns (bool)"
+  ];
+
+  async function connectWallet() {
+    if (!window.ethereum) {
+      alert("Necesitas MetaMask");
+      return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const userAddress = await signer.getAddress();
+
+    const contract = new ethers.Contract(
+      stakingAddress,
+      stakingABI,
+      provider
+    );
+
+    const access = await contract.hasAccess(userAddress);
+    showResult(access);
+  }
+
+  function showResult(access) {
+    const box = document.getElementById("status");
+
+    if (access) {
+      box.innerHTML = `
+        <h2>Acceso activo ✔️</h2>
+        <h3>Análisis semanal BTC</h3>
+        <p>
+          Bitcoin continúa en fase de consolidación. En este entorno,
+          la paciencia y la gestión del riesgo son clave.
+        </p>
+        <p>
+          Este espacio se actualizará semanalmente con análisis,
+          contexto y reflexiones de mercado.
+        </p>
+      `;
+    } else {
+      box.innerHTML = `
+        <h2>Acceso no activo</h2>
+        <p>
+          Para acceder al contenido necesitas stakear <strong>2.000 BTCX</strong>
+          en el contrato oficial.
+        </p>
+        <p>
+          Una vez completes el staking, recarga esta página.
+        </p>
+      `;
+    }
+  }
+
+  document
+    .getElementById("connectBtn")
+    .addEventListener("click", connectWallet);
+</script>
+
 </body>
 </html>
