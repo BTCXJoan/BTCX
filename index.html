@@ -3,106 +3,165 @@
 <head>
   <meta charset="UTF-8">
   <title>BTCX – Acceso Bitcoin</title>
+
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    <div class="hero">
-  <header>
-    <img src="btcx-logo.png" alt="BTCX logo">
-  </header>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #0e0e0e;
+      color: #f5f5f5;
+      max-width: 720px;
+      margin: auto;
+      padding: 60px 20px;
+    }
 
-  <p>
-    Acceso a contenido avanzado sobre Bitcoin mediante staking on-chain.
-  </p>
-
-  <button id="connectBtn">Conectar wallet</button>
-</div>
     .hero {
-  text-align: center;
-  margin-bottom: 40px;
-}
-    header img {
-  width: 180px;
-  height: 180px;
-  object-fit: cover;
-}
-  <body>
-
-<div class="hero">
-  <img src="btcx-logo.png" alt="BTCX logo" class="logo">
-
-  <h1>BTCX</h1>
-
-  <p>
-    Acceso a contenido avanzado sobre Bitcoin mediante staking on-chain.
-  </p>
-
-  <button id="connectBtn">Conectar wallet</button>
-</div>
-
-<div id="status" class="box"></div>
-
-<script>
-  const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-
-  const stakingABI = [
-    "function hasAccess(address user) view returns (bool)"
-  ];
-
-  async function connectWallet() {
-    if (!window.ethereum) {
-      alert("Necesitas MetaMask");
-      return;
+      text-align: center;
+      margin-bottom: 40px;
     }
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    const userAddress = await signer.getAddress();
-
-    const contract = new ethers.Contract(
-      stakingAddress,
-      stakingABI,
-      provider
-    );
-
-    const access = await contract.hasAccess(userAddress);
-    showResult(access);
-  }
-
-  function showResult(access) {
-    const box = document.getElementById("status");
-
-    if (access) {
-      box.innerHTML = `
-        <h2>Acceso activo ✔️</h2>
-        <h3>Análisis semanal BTC</h3>
-        <p>
-          Bitcoin continúa en fase de consolidación. En este entorno,
-          la paciencia y la gestión del riesgo son clave.
-        </p>
-        <p>
-          Este espacio se actualizará semanalmente con análisis,
-          contexto y reflexiones de mercado.
-        </p>
-      `;
-    } else {
-      box.innerHTML = `
-        <h2>Acceso no activo</h2>
-        <p>
-          Para acceder al contenido necesitas stakear <strong>2.000 BTCX</strong>
-          en el contrato oficial.
-        </p>
-        <p>
-          Una vez completes el staking, recarga esta página.
-        </p>
-      `;
+    .logo {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      margin-bottom: 20px;
     }
-  }
 
-  document
-    .getElementById("connectBtn")
-    .addEventListener("click", connectWallet);
-</script>
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #b3b3b3;
+      line-height: 1.6;
+    }
+
+    button {
+      background: #3fa9f5;
+      color: #0e0e0e;
+      border: none;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .box {
+      border: 1px solid #222;
+      background: #121212;
+      padding: 32px;
+      margin-top: 40px;
+      border-radius: 10px;
+    }
+
+    h3 {
+      color: #3fa9f5;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="hero">
+    <img src="btcx-logo.png" alt="BTCX logo" class="logo">
+
+    <h1>BTCX</h1>
+
+    <p>
+      Acceso a contenido avanzado sobre Bitcoin mediante staking on-chain.
+    </p>
+
+    <button id="connectBtn">Conectar wallet</button>
+  </div>
+
+  <div id="status" class="box"></div>
+
+  <footer>
+    Acceso verificado on-chain · Polygon · BTCX
+  </footer>
+
+  <script>
+    const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+
+    const stakingABI = [
+      "function hasAccess(address user) view returns (bool)"
+    ];
+
+    async function connectWallet() {
+      if (!window.ethereum) {
+        alert("Necesitas MetaMask");
+        return;
+      }
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const userAddress = await signer.getAddress();
+
+      const contract = new ethers.Contract(
+        stakingAddress,
+        stakingABI,
+        provider
+      );
+
+      const access = await contract.hasAccess(userAddress);
+      showResult(access);
+    }
+
+    function showResult(access) {
+      const box = document.getElementById("status");
+
+      if (access) {
+        box.innerHTML = `
+          <h2>Acceso activo ✔️</h2>
+          <h3>Análisis semanal BTC</h3>
+          <p>
+            Bitcoin continúa en fase de consolidación. En este entorno,
+            la paciencia y la gestión del riesgo son clave.
+          </p>
+          <p>
+            Este espacio se actualizará semanalmente con análisis,
+            contexto y reflexiones de mercado.
+          </p>
+        `;
+      } else {
+        box.innerHTML = `
+          <h2>Acceso no activo</h2>
+          <p>
+            Para acceder al contenido necesitas stakear <strong>2.000 BTCX</strong>
+            en el contrato oficial.
+          </p>
+          <p>
+            Una vez completes el staking, recarga esta página.
+          </p>
+        `;
+      }
+    }
+
+    document
+      .getElementById("connectBtn")
+      .addEventListener("click", connectWallet);
+  </script>
 
 </body>
 </html>
