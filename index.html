@@ -2,128 +2,67 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>BTCX – Acceso Bitcoin</title>
-
+  <title>BTCX</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-  <!-- Fuente -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: 'Inter', Arial, sans-serif;
-      background: #0e0e0e;
-      color: #f5f5f5;
-      max-width: 720px;
-      margin: auto;
-      padding: 60px 20px;
-    }
-
-    .hero {
+      font-family: Arial, sans-serif;
+      background: #0b0f1a;
+      color: #fff;
       text-align: center;
-      margin-bottom: 40px;
+      padding: 40px;
     }
 
-    .logo {
+    .hero img {
       width: 180px;
-      height: 180px;
-      object-fit: cover;
       margin-bottom: 20px;
     }
 
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #b3b3b3;
-      line-height: 1.6;
-    }
-
     button {
-      background: #3fa9f5;
-      color: #0e0e0e;
-      border: none;
-      padding: 14px 28px;
+      padding: 12px 24px;
       font-size: 16px;
-      font-weight: 600;
       cursor: pointer;
-      border-radius: 6px;
       margin-top: 20px;
     }
 
-    button:hover {
-      opacity: 0.9;
-    }
-
     .box {
-      border: 1px solid #222;
-      background: #121212;
-      padding: 32px;
       margin-top: 40px;
-      border-radius: 10px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
     }
 
-    h3 {
-      color: #3fa9f5;
+    .box h2, .box h3, .box h4 {
+      margin-top: 24px;
     }
 
-    footer {
-      margin-top: 60px;
-      font-size: 13px;
-      color: #666;
-      text-align: center;
+    .box p {
+      margin-top: 12px;
+      color: #ccc;
     }
-    .box h3 {
-  margin-top: 0;
-}
-
-.box p {
-  font-size: 14px;
-  color: #888;
-}
-    .box h2,
-.box h3,
-.box h4 {
-  margin-top: 24px;
-}
-
-.box p {
-  margin-top: 12px;
-}
   </style>
 </head>
 
 <body>
 
   <div class="hero">
-    <img src="btcx-logo.png" alt="BTCX logo" class="logo">
-
-    <p>
-      Acceso a contenido avanzado sobre Bitcoin mediante staking on-chain.
-    </p>
-
+    <img src="btcx-logo.png" alt="BTCX logo">
     <button id="connectBtn">Conectar wallet</button>
   </div>
 
   <div id="status" class="box"></div>
 
-  <footer>
-    Acceso verificado on-chain · Polygon · BTCX
-  </footer>
-
   <script>
     const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-
     const stakingABI = [
       "function hasAccess(address user) view returns (bool)"
     ];
 
     async function connectWallet() {
       alert("Intentando conectar wallet");
+
       if (!window.ethereum) {
         alert("Necesitas MetaMask");
         return;
@@ -147,69 +86,25 @@
     function showResult(access) {
       const box = document.getElementById("status");
 
-document.getElementById("connectBtn").style.display = "none";
-      
-if (access) {
-  box.innerHTML =
-    '<h2>Acceso activo ✔️</h2>' +
-    '<h3>Análisis semanal BTC – Semana 1</h3>' +
-    '<p><strong>Fecha:</strong> ' + new Date().toLocaleDateString() + '</p>' +
-
-    '<h4>Contexto</h4>' +
-    '<p>Bitcoin continúa desarrollándose en un entorno de incertidumbre macroeconómica. ' +
-    'La política monetaria, los tipos de interés y el contexto global siguen influyendo ' +
-    'en el comportamiento del mercado.</p>' +
-
-    '<h4>Lectura del mercado</h4>' +
-    '<p>BTC se encuentra en una fase de consolidación. No hay confirmaciones claras de ' +
-    'ruptura direccional, lo que hace que la paciencia sea un factor clave.</p>' +
-
-    '<h4>Reflexión final</h4>' +
-    '<p>La ventaja no está en anticiparse, sino en esperar estructuras claras, ' +
-    'gestionar el riesgo y evitar la sobreoperativa.</p>' +
-
-    '<p><em>— BTCX</em></p>';
-}
+      if (access) {
+        box.innerHTML =
+          "<h2>Acceso activo ✔️</h2>" +
+          "<h3>Análisis semanal BTC – Semana 1</h3>" +
+          "<p>Bitcoin se encuentra en fase de consolidación. La paciencia y la gestión del riesgo son clave.</p>" +
+          "<p><em>— BTCX</em></p>";
       } else {
-        box.innerHTML = `
-          <h2>Acceso no activo</h2>
-          <p>
-            Para acceder al contenido necesitas stakear <strong>2.000 BTCX</strong>
-            en el contrato oficial.
-          </p>
-          <p>
-            Una vez completes el staking, recarga esta página.
-          </p>
-        `;
+        box.innerHTML =
+          "<h2>Acceso no activo</h2>" +
+          "<p>Necesitas stakear 2.000 BTCX para acceder.</p>";
       }
     }
 
     window.onload = function () {
-  const btn = document.getElementById("connectBtn");
-  if (btn) {
-    btn.addEventListener("click", connectWallet);
-  }
-};
+      document
+        .getElementById("connectBtn")
+        .addEventListener("click", connectWallet);
+    };
   </script>
-<div class="box" style="margin-top:60px;">
-  <h3>Sobre BTCX</h3>
-  <p>
-    BTCX es un token diseñado exclusivamente como mecanismo de acceso a contenido privado
-    relacionado con Bitcoin mediante staking on-chain.
-  </p>
-  <p>
-    BTCX no representa una inversión, no garantiza rentabilidad y no ofrece liquidez automática.
-    El acceso al contenido se mantiene únicamente mientras el staking esté activo.
-  </p>
-  <p>
-    En la fase actual no existe un mercado oficial ni un mecanismo automático de compra o venta.
-    El precio de acceso puede variar con el tiempo, lo que no implica un derecho de reventa ni
-    una promesa de beneficio.
-  </p>
-  <p>
-    BTCX está orientado a personas que valoran el análisis, el criterio y la continuidad del
-    proyecto, no a la especulación a corto plazo.
-  </p>
-</div>
+
 </body>
 </html>
