@@ -137,59 +137,27 @@
     function showResult(access) {
       const box = document.getElementById("status");
 
-      if (access) {
-        box.innerHTML = `
-📌 Análisis semanal BTC – Semana 1
+if (access) {
+  box.innerHTML =
+    '<h2>Acceso activo ✔️</h2>' +
+    '<h3>Análisis semanal BTC – Semana 1</h3>' +
+    '<p><strong>Fecha:</strong> ' + new Date().toLocaleDateString() + '</p>' +
 
-Fecha:  [lunes 26 de enero de 2026]
+    '<h4>Contexto</h4>' +
+    '<p>Bitcoin continúa desarrollándose en un entorno de incertidumbre macroeconómica. ' +
+    'La política monetaria, los tipos de interés y el contexto global siguen influyendo ' +
+    'en el comportamiento del mercado.</p>' +
 
-⸻
+    '<h4>Lectura del mercado</h4>' +
+    '<p>BTC se encuentra en una fase de consolidación. No hay confirmaciones claras de ' +
+    'ruptura direccional, lo que hace que la paciencia sea un factor clave.</p>' +
 
-Contexto
-Bitcoin continúa desarrollándose en un entorno de alta incertidumbre macroeconómica.
-Tipos de interés elevados, tensiones geopolíticas y expectativas cambiantes sobre la política monetaria siguen condicionando el comportamiento del mercado.
+    '<h4>Reflexión final</h4>' +
+    '<p>La ventaja no está en anticiparse, sino en esperar estructuras claras, ' +
+    'gestionar el riesgo y evitar la sobreoperativa.</p>' +
 
-En este contexto, es fácil caer en el ruido de corto plazo.
-
-⸻
-
-Lectura del mercado
-Desde el punto de vista técnico, BTC se mantiene en una fase de consolidación tras el último movimiento direccional relevante.
-No estamos viendo señales claras de ruptura, ni al alza ni a la baja.
-
-Este tipo de estructuras suelen poner a prueba la paciencia:
-	•	movimientos erráticos
-	•	falsas señales
-	•	exceso de opiniones externas
-
-Precisamente por eso, no es un momento para la sobreoperativa.
-
-⸻
-
-Qué estoy observando
-Más que niveles concretos, esta semana el foco está en:
-	•	estructura
-	•	volumen
-	•	reacción del precio en zonas clave
-
-Mientras no haya confirmación, la mejor decisión suele ser no forzar escenarios.
-
-⸻
-
-Reflexión final
-Uno de los errores más comunes en Bitcoin no es equivocarse de dirección, sino querer anticiparse demasiado.
-
-La ventaja no está en predecir, sino en:
-	•	esperar
-	•	gestionar riesgo
-	•	actuar solo cuando el mercado ofrece claridad
-
-Este espacio se actualizará semanalmente con análisis, contexto y reflexiones orientadas a la toma de decisiones, no a la especulación impulsiva.
-
-⸻
-
-— BTCX
-        `;
+    '<p><em>— BTCX</em></p>';
+}
       } else {
         box.innerHTML = `
           <h2>Acceso no activo</h2>
