@@ -3,75 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <title>BTCX</title>
+
+  <!-- Ethers -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
   <style>
     body {
-  font-family: Arial, sans-serif;
-  background: #0b0f1a;
-  color: #ffffff;
-  text-align: center;
-  margin: 0;
-  padding: 60px 20px;
-}
+      margin: 0;
+      padding: 60px 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #0b0f1a;
+      color: #ffffff;
+      text-align: center;
+    }
 
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-.hero img {
-  width: 180px;
-  margin-bottom: 24px;
-}
+    .hero img {
+      width: 160px;
+      margin-bottom: 30px;
+    }
 
-button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 28px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    button {
+      background: #2563eb;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-button:hover {
-  background: #1e4fd8;
-}
+    button:hover {
+      background: #1e4fd8;
+    }
 
-.box {
-  margin-top: 50px;
-  max-width: 680px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
+    .content {
+      margin-top: 50px;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
 
-.box h2 {
-  margin-top: 0;
-}
+    .content h2 {
+      margin-top: 0;
+    }
 
-.box h3 {
-  margin-top: 32px;
-}
+    .content h3 {
+      margin-top: 32px;
+    }
 
-.box p {
-  margin-top: 14px;
-  line-height: 1.6;
-  color: #d1d5db;
-}
+    .content p {
+      margin-top: 14px;
+      line-height: 1.6;
+      color: #d1d5db;
+    }
+
+    .footer {
+      margin-top: 80px;
+      font-size: 13px;
+      color: #888;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
   </style>
 </head>
 
 <body>
 
+  <!-- HERO -->
   <div class="hero">
     <img src="btcx-logo.png" alt="BTCX logo">
     <button id="connectBtn">Conectar wallet</button>
   </div>
 
-  <div id="status" class="box"></div>
+  <!-- CONTENT -->
+  <div id="content" class="content"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>
+      BTCX es un token diseñado exclusivamente como mecanismo de acceso a contenido privado
+      relacionado con Bitcoin mediante staking on-chain.
+    </p>
+    <p>
+      BTCX no representa una inversión, no garantiza rentabilidad y no ofrece liquidez automática.
+      El acceso al contenido se mantiene únicamente mientras el staking esté activo.
+    </p>
+  </div>
 
   <script>
     const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
@@ -80,10 +106,8 @@ button:hover {
     ];
 
     async function connectWallet() {
-      alert("Intentando conectar wallet");
-
       if (!window.ethereum) {
-        alert("Necesitas MetaMask");
+        alert("Necesitas MetaMask para continuar");
         return;
       }
 
@@ -99,29 +123,38 @@ button:hover {
       );
 
       const access = await contract.hasAccess(userAddress);
-      showResult(access);
+      showContent(access);
     }
 
-    function showResult(access) {
-      const box = document.getElementById("status");
+    function showContent(access) {
+      const content = document.getElementById("content");
 
       if (access) {
-        box.innerHTML =
-          "<h2>Acceso activo ✔️</h2>" +
+        content.innerHTML =
+          "<h2>Acceso activo</h2>" +
+
           "<h3>Análisis semanal BTC – Semana 1</h3>" +
-          "<p>Bitcoin se encuentra en fase de consolidación. La paciencia y la gestión del riesgo son clave.</p>" +
+          "<p><strong>Contexto</strong></p>" +
+          "<p>Bitcoin continúa desarrollándose en un entorno de incertidumbre macroeconómica. La política monetaria y el contexto global siguen influyendo en el mercado.</p>" +
+
+          "<p><strong>Lectura del mercado</strong></p>" +
+          "<p>BTC se encuentra en una fase de consolidación. No hay confirmaciones claras de ruptura direccional, lo que hace que la paciencia sea clave.</p>" +
+
+          "<p><strong>Reflexión final</strong></p>" +
+          "<p>La ventaja no está en anticiparse, sino en esperar estructuras claras, gestionar el riesgo y actuar con criterio.</p>" +
+
           "<p><em>— BTCX</em></p>";
+
+        document.getElementById("connectBtn").style.display = "none";
       } else {
-        box.innerHTML =
+        content.innerHTML =
           "<h2>Acceso no activo</h2>" +
-          "<p>Necesitas stakear 2.000 BTCX para acceder.</p>";
+          "<p>Para acceder al contenido es necesario stakear <strong>2.000 BTCX</strong> en el contrato oficial.</p>";
       }
     }
 
     window.onload = function () {
-      document
-        .getElementById("connectBtn")
-        .addEventListener("click", connectWallet);
+      document.getElementById("connectBtn").addEventListener("click", connectWallet);
     };
   </script>
 
