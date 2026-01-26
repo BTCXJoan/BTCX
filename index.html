@@ -123,6 +123,7 @@
     ];
 
     async function connectWallet() {
+      alert("Intentando conectar wallet");
       if (!window.ethereum) {
         alert("Necesitas MetaMask");
         return;
@@ -183,9 +184,12 @@ if (access) {
       }
     }
 
-    document
-      .getElementById("connectBtn")
-      .addEventListener("click", connectWallet);
+    window.onload = function () {
+  const btn = document.getElementById("connectBtn");
+  if (btn) {
+    btn.addEventListener("click", connectWallet);
+  }
+};
   </script>
 <div class="box" style="margin-top:60px;">
   <h3>Sobre BTCX</h3>
