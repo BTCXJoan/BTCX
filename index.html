@@ -1,199 +1,47 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>BTCX</title>
+<meta charset="UTF-8">
+<title>BTCX</title>
 
-  <!-- Ethers -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<style>
+body {
+  background:#0b0f1a;
+  color:white;
+  font-family:Arial;
+  text-align:center;
+  padding:60px;
+}
 
-  <style>
-    body {
-      margin: 0;
-      padding: 60px 20px;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: #0b0f1a;
-      color: #ffffff;
-      text-align: center;
-    }
+.logo {
+  width:140px;
+  margin-bottom:30px;
+}
 
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .hero img {
-      width: 160px;
-      margin-bottom: 30px;
-    }
-
-    button {
-      background: #2563eb;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 28px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #1e4fd8;
-    }
-
-    .content {
-      margin-top: 50px;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-    }
-
-    .content h2 {
-      margin-top: 0;
-    }
-
-    .content h3 {
-      margin-top: 32px;
-    }
-
-    .content p {
-      margin-top: 14px;
-      line-height: 1.6;
-      color: #d1d5db;
-    }
-
-    .footer {
-      margin-top: 80px;
-      font-size: 13px;
-      color: #888;
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: left;
-    }
-  </style>
+a.button {
+  display:block;
+  margin:15px auto;
+  padding:15px;
+  width:260px;
+  background:#2563eb;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- HERO -->
-  <div class="hero">
-    <img src="btcx-logo.png" alt="BTCX logo">
-    <button id="connectBtn">Conectar wallet</button>
-  </div>
+<img src="btcx-logo.png" class="logo">
 
-  <!-- CONTENT -->
-  <div id="content" class="content"></div>
+<h1>BTCX — Bitcoin explicado sin ruido</h1>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    <p>
-      BTCX es un token diseñado exclusivamente como mecanismo de acceso a contenido privado
-      relacionado con Bitcoin mediante staking on-chain.
-    </p>
-    <p>
-      BTCX no representa una inversión, no garantiza rentabilidad y no ofrece liquidez automática.
-      El acceso al contenido se mantiene únicamente mientras el staking esté activo.
-    </p>
-  </div>
+<p>Serie educativa estructurada sobre Bitcoin.</p>
 
-  <script>
-    const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-    const stakingABI = [
-      "function hasAccess(address user) view returns (bool)"
-    ];
-
-    async function connectWallet() {
-      if (!window.ethereum) {
-        alert("Necesitas MetaMask para continuar");
-        return;
-      }
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
-      const userAddress = await signer.getAddress();
-
-      const contract = new ethers.Contract(
-        stakingAddress,
-        stakingABI,
-        provider
-      );
-
-      const access = await contract.hasAccess(userAddress);
-      showContent(access);
-    }
-
-    function showContent(access) {
-      const content = document.getElementById("content");
-
-      if (access) {
-        content.innerHTML =
-          content.innerHTML =
-
-"<h2>Acceso activo</h2>" +
-
-"<h3>Capítulo 1 — ¿Qué es Bitcoin y por qué importa?</h3>" +
-
-"<p><strong>Introducción</strong></p>" +
-"<p>Bitcoin no es una acción, no es una empresa y no es una promesa de rentabilidad. Bitcoin es, ante todo, una herramienta creada para transferir valor por internet sin intermediarios.</p>" +
-
-"<p><strong>El problema que intenta resolver</strong></p>" +
-"<p>Hoy en día, casi todo el dinero es digital, pero depende de bancos y sistemas centralizados. Bitcoin nace como una alternativa que permite transferir valor sin permisos.</p>" +
-
-"<p><strong>Qué es Bitcoin</strong></p>" +
-"<p>Es un sistema de dinero digital descentralizado con reglas públicas que nadie puede modificar unilateralmente.</p>" +
-
-"<p><strong>Oferta limitada</strong></p>" +
-"<p>Nunca existirán más de 21 millones de bitcoins, algo verificable por cualquiera.</p>" +
-
-"<p><em>Bitcoin no promete rentabilidad. Ofrece un sistema alternativo verificable.</em></p>" +
-
-
-"<h3>Capítulo 2 — ¿Por qué existe Bitcoin?</h3>" +
-
-"<p><strong>Contexto</strong></p>" +
-"<p>Bitcoin aparece tras la crisis financiera de 2008 como respuesta a la falta de confianza en el sistema bancario tradicional.</p>" +
-
-"<p><strong>Un sistema basado en reglas</strong></p>" +
-"<p>Las reglas están escritas en código y se aplican a todos por igual.</p>" +
-
-"<p><strong>Emisión predecible</strong></p>" +
-"<p>Bitcoin introduce un dinero cuya oferta no puede alterarse arbitrariamente.</p>" +
-
-"<p><strong>Resistencia a censura</strong></p>" +
-"<p>Permite transferencias sin permisos ni intermediarios.</p>" +
-
-"<p><em>Bitcoin no pretende sustituir el sistema actual, sino ofrecer una alternativa.</em></p>" +
-
-
-"<h3>Capítulo 3 — ¿Qué significa realmente poseer Bitcoin?</h3>" +
-
-"<p><strong>Propiedad real</strong></p>" +
-"<p>Poseer Bitcoin significa controlar las claves privadas que permiten mover los fondos.</p>" +
-
-"<p><strong>Qué es una wallet</strong></p>" +
-"<p>Una wallet gestiona claves privadas, no guarda los bitcoins físicamente.</p>" +
-
-"<p><strong>Custodia vs autocustodia</strong></p>" +
-"<p>En custodia dependes de terceros. En autocustodia tienes control total y responsabilidad.</p>" +
-
-"<p><strong>Importancia</strong></p>" +
-"<p>Comprender esto es entender la esencia de Bitcoin: control, responsabilidad y libertad de elección.</p>";
-        document.getElementById("connectBtn").style.display = "none";
-      } else {
-        content.innerHTML =
-          "<h2>Acceso no activo</h2>" +
-          "<p>Para acceder al contenido es necesario stakear <strong>2.000 BTCX</strong> en el contrato oficial.</p>";
-      }
-    }
-
-    window.onload = function () {
-      document.getElementById("connectBtn").addEventListener("click", connectWallet);
-    };
-  </script>
+<a class="button" href="capitulo1.html">Capítulo 1</a>
+<a class="button" href="capitulo2.html">Capítulo 2</a>
+<a class="button" href="capitulo3.html">Capítulo 3</a>
 
 </body>
 </html>
