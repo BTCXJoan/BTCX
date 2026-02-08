@@ -15,9 +15,30 @@ body {
   padding:40px;
 }
 
-.logo {
-  width:140px;
-  margin-bottom:20px;
+.logo { width:140px; margin-bottom:20px; }
+
+.priceBox {
+  font-size:32px;
+  font-weight:bold;
+  margin:20px 0;
+}
+
+.tableWrap {
+  max-width:650px;
+  margin:20px auto;
+  background:#111827;
+  padding:15px;
+  border-radius:10px;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+th, td {
+  padding:8px;
+  border-bottom:1px solid #333;
 }
 
 .button {
@@ -35,21 +56,34 @@ body {
   text-decoration:none;
 }
 
-.logout {
-  background:#444;
-}
+.logout { background:#444; }
 </style>
 </head>
 <body>
 
 <img src="btcx-logo.png" class="logo">
-
 <h2>BTCX — Biblioteca Bitcoin</h2>
 
-<!-- GRAFICO BTC -->
+<div id="btcPrice" class="priceBox">Cargando precio BTC...</div>
+
+<!-- GRÁFICO BTC -->
 <div style="margin:30px auto; max-width:650px;">
 <iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP:BTCUSD&interval=D&theme=dark"
 width="100%" height="320" frameborder="0"></iframe>
+</div>
+
+<div class="tableWrap">
+<h3>Máximos y mínimos por año</h3>
+<table id="yearTable">
+<thead>
+<tr>
+<th>Año</th>
+<th>Máximo (USD)</th>
+<th>Mínimo (USD)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
 
 <button id="connectBtn" class="button">Conectar wallet</button>
@@ -58,22 +92,58 @@ width="100%" height="320" frameborder="0"></iframe>
 <div id="status"></div>
 
 <div id="library" style="display:none;">
-
-<a class="button" href="capitulo1.html">
-Capítulo 1 — Qué es Bitcoin y por qué importa
-</a>
-
-<a class="button" href="capitulo2.html">
-Capítulo 2 — Por qué existe Bitcoin
-</a>
-
-<a class="button" href="capitulo3.html">
-Capítulo 3 — Qué significa poseer Bitcoin
-</a>
-
+<a class="button" href="capitulo1.html">Capítulo 1 — Qué es Bitcoin y por qué importa</a>
+<a class="button" href="capitulo2.html">Capítulo 2 — Por qué existe Bitcoin</a>
+<a class="button" href="capitulo3.html">Capítulo 3 — Qué significa poseer Bitcoin</a>
 </div>
 
 <script>
+// ====== PRECIO ACTUAL BTC ======
+async function loadBTCPrice(){
+  try{
+    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
+    const data = await res.json();
+    const price = data.bitcoin.usd.toLocaleString();
+    document.getElementById("btcPrice").innerHTML = "BTC/USD: $" + price;
+  }catch(e){
+    document.getElementById("btcPrice").innerHTML = "No se pudo cargar el precio";
+  }
+}
+
+// ====== MAX/MIN POR AÑO ======
+async function loadYearStats(){
+  try{
+    const res = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max");
+    const data = await res.json();
+    const prices = data.prices;
+
+    const byYear = {};
+    prices.forEach(p=>{
+      const d = new Date(p[0]);
+      const y = d.getFullYear();
+      const price = p[1];
+      if(!byYear[y]) byYear[y]={max:price,min:price};
+      if(price>byYear[y].max) byYear[y].max=price;
+      if(price<byYear[y].min) byYear[y].min=price;
+    });
+
+    const years = Object.keys(byYear).slice(-5); // últimos 5 años
+    const tbody = document.querySelector("#yearTable tbody");
+    years.forEach(y=>{
+      const row = `<tr>
+        <td>${y}</td>
+        <td>$${byYear[y].max.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+        <td>$${byYear[y].min.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
+      </tr>`;
+      tbody.innerHTML += row;
+    });
+
+  }catch(e){
+    console.log(e);
+  }
+}
+
+// ====== WEB3 ACCESO ======
 const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
 
 const stakingABI = [
@@ -83,7 +153,6 @@ const stakingABI = [
 ];
 
 async function connectWallet(){
-
   if(!window.ethereum){ alert("Necesitas MetaMask"); return;}
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -92,11 +161,9 @@ async function connectWallet(){
   const userAddress = await signer.getAddress();
 
   const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
-
   const access = await contract.hasAccess(userAddress);
 
   if(access){
-
     localStorage.setItem("btcxConnected","true");
 
     const stakeData = await contract.stakes(userAddress);
@@ -113,13 +180,9 @@ async function connectWallet(){
     document.getElementById("library").style.display="block";
     document.getElementById("connectBtn").style.display="none";
     document.getElementById("logoutBtn").style.display="inline-block";
-
   }else{
-
     document.getElementById("status").innerHTML="No tienes acceso activo";
-
   }
-
 }
 
 function logout(){
@@ -133,8 +196,10 @@ function logout(){
 document.getElementById("connectBtn").onclick = connectWallet;
 document.getElementById("logoutBtn").onclick = logout;
 
-window.onload = async () => {
-  if(localStorage.getItem("btcxConnected") === "true"){
+window.onload = async ()=>{
+  loadBTCPrice();
+  loadYearStats();
+  if(localStorage.getItem("btcxConnected")==="true"){
     await connectWallet();
   }
 };
