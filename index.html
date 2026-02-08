@@ -4,175 +4,54 @@
 <meta charset="UTF-8">
 <title>BTCX</title>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-<style>
-body { background:#0b0f1a; color:white; font-family:Arial; text-align:center; padding:40px; }
-.logo { width:140px; margin-bottom:20px; }
-
-.button {
-  margin:12px auto; padding:14px; background:#2563eb;
-  border:none; color:white; border-radius:8px;
-  cursor:pointer; display:block; width:320px;
-  text-decoration:none;
-}
-
-.logout { background:#444; }
-
-.box { max-width:500px; margin:20px auto; background:#111827; padding:15px; border-radius:8px; }
-
-.panel { max-width:650px; margin:20px auto; background:#111827; padding:18px; border-radius:10px; text-align:left; }
-
-.priceBox { font-size:28px; font-weight:bold; margin:15px 0; }
-
-.tableWrap { max-width:650px; margin:20px auto; background:#111827; padding:15px; border-radius:10px; }
-table { width:100%; border-collapse:collapse; }
-th, td { padding:8px; border-bottom:1px solid #333; }
-</style>
 </head>
-<body>
+<body style="background:#0b0f1a;color:white;text-align:center;font-family:Arial;padding:40px;">
 
-<!-- PUBLIC -->
-
-<div id="publicView">
-
-<img src="btcx-logo.png" class="logo">
 <h2>BTCX — Biblioteca Bitcoin</h2>
 
-<div class="box">
-<p>Para acceder necesitas mantener <strong>2.000 BTCX</strong> en staking.</p>
-<p>Puedes solicitar acceso al proyecto aquí:</p>
+<button onclick="connect()">Conectar wallet</button>
 
-<a class="button" href="mailto:btcxproject@proton.me?subject=Solicitud BTCX">Solicitar acceso</a>
-
-</div>
-
-<button id="connectBtn" class="button">Conectar wallet</button>
-<div id="message"></div>
-
-</div>
-
-<!-- PRIVATE DASHBOARD -->
-
-<div id="privateView" style="display:none;">
-
-<img src="btcx-logo.png" class="logo">
-<h2>BTCX — Dashboard</h2>
-
-<div id="btcPrice" class="priceBox"></div>
-
-<div style="max-width:650px;margin:auto;">
-<iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP:BTCUSD&interval=D&theme=dark"
-width="100%" height="300"></iframe>
-</div>
-
-<div class="panel">
-<h3>Tu estado BTCX</h3>
-<div id="userPanel"></div>
-</div>
-
-<div class="tableWrap">
-<h3>Máximos y mínimos por año</h3>
-<table id="yearTable">
-<thead><tr><th>Año</th><th>Máximo</th><th>Mínimo</th></tr></thead>
-<tbody></tbody>
-</table>
-</div>
-
-<a class="button" href="capitulo1.html">Capítulo 1</a>
-<a class="button" href="capitulo2.html">Capítulo 2</a>
-<a class="button" href="capitulo3.html">Capítulo 3</a>
-
-<button id="logoutBtn" class="button logout">Desconectar</button>
-
-</div>
+<div id="status"></div>
 
 <script>
-// BTC price
-async function loadBTCPrice(){
- const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
- const d=await r.json();
- document.getElementById("btcPrice").innerHTML="BTC/USD: $"+d.bitcoin.usd.toLocaleString();
-}
 
-// Year stats (últimos 5 años)
-async function loadYearStats(){
- const r=await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max");
- const d=await r.json();
- const byYear={};
- d.prices.forEach(p=>{
-  const y=new Date(p[0]).getFullYear();
-  const price=p[1];
-  if(!byYear[y]) byYear[y]={max:price,min:price};
-  if(price>byYear[y].max) byYear[y].max=price;
-  if(price<byYear[y].min) byYear[y].min=price;
- });
- const years=Object.keys(byYear).slice(-5);
- const tbody=document.querySelector("#yearTable tbody");
- tbody.innerHTML="";
- years.forEach(y=>{
-  tbody.innerHTML+=`<tr><td>${y}</td>
-  <td>$${byYear[y].max.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
-  <td>$${byYear[y].min.toLocaleString(undefined,{maximumFractionDigits:0})}</td></tr>`;
- });
-}
-
-// Web3
 const stakingAddress="0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-const TOTAL_SUPPLY=10000000;
 
 const stakingABI=[
- "function hasAccess(address user) view returns(bool)",
- "function stakes(address user) view returns(uint256,uint256)",
- "function totalStaked() view returns(uint256)"
+ "function hasAccess(address user) view returns(bool)"
 ];
 
-async function connectWallet(){
+async function connect(){
 
- if(!window.ethereum){alert("Necesitas MetaMask");return;}
-
- const provider=new ethers.providers.Web3Provider(window.ethereum);
- await provider.send("eth_requestAccounts",[]);
- const signer=provider.getSigner();
- const user=await signer.getAddress();
-
- const c=new ethers.Contract(stakingAddress,stakingABI,provider);
- const access=await c.hasAccess(user);
-
- if(!access){
-   document.getElementById("message").innerHTML="No tienes staking activo.";
-   return;
- }
-
- localStorage.setItem("btcxConnected","true");
-
- const s=await c.stakes(user);
- const total=await c.totalStaked();
-
- const userAmount=parseFloat(ethers.utils.formatUnits(s[0],18));
- const totalAmount=parseFloat(ethers.utils.formatUnits(total,18));
-
- document.getElementById("userPanel").innerHTML=
- BTCX en staking: ${userAmount}<br>Total BTCX bloqueados: ${totalAmount};
-
- document.getElementById("publicView").style.display="none";
- document.getElementById("privateView").style.display="block";
-
- loadBTCPrice();
- loadYearStats();
+if(!window.ethereum){
+ document.getElementById("status").innerHTML="MetaMask no detectado";
+ return;
 }
 
-function logout(){
- localStorage.removeItem("btcxConnected");
- document.getElementById("privateView").style.display="none";
- document.getElementById("publicView").style.display="block";
+try{
+
+const provider=new ethers.providers.Web3Provider(window.ethereum);
+await provider.send("eth_requestAccounts",[]);
+const signer=provider.getSigner();
+const address=await signer.getAddress();
+
+document.getElementById("status").innerHTML="Wallet conectada: "+address;
+
+const contract=new ethers.Contract(stakingAddress,stakingABI,provider);
+const access=await contract.hasAccess(address);
+
+if(access){
+ document.getElementById("status").innerHTML+="<br>Acceso activo ✔";
+}else{
+ document.getElementById("status").innerHTML+="<br>No hay staking activo";
 }
 
-document.getElementById("connectBtn").onclick=connectWallet;
-document.getElementById("logoutBtn").onclick=logout;
+}catch(e){
+ document.getElementById("status").innerHTML="Error: "+e;
+}
 
-window.onload=async()=>{
- if(localStorage.getItem("btcxConnected")==="true"){await connectWallet();}
-};
+}
+
 </script>
 
 </body>
