@@ -4,28 +4,41 @@
 <meta charset="UTF-8">
 <title>BTCX</title>
 
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 <style>
 body {
   background:#0b0f1a;
   color:white;
   font-family:Arial;
   text-align:center;
-  padding:60px;
+  padding:40px;
 }
 
 .logo {
   width:140px;
-  margin-bottom:30px;
+  margin-bottom:20px;
 }
 
-a.button {
-  display:block;
+.button {
+  margin:10px;
+  padding:12px 20px;
+  background:#2563eb;
+  border:none;
+  color:white;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.logout {
+  background:#444;
+}
+
+.chapter {
   margin:15px auto;
   padding:15px;
   width:260px;
-  background:#2563eb;
-  color:white;
-  text-decoration:none;
+  background:#111827;
   border-radius:8px;
 }
 </style>
@@ -35,13 +48,64 @@ a.button {
 
 <img src="btcx-logo.png" class="logo">
 
-<h1>BTCX — Bitcoin explicado sin ruido</h1>
+<h2>BTCX — Biblioteca Bitcoin</h2>
 
-<p>Serie educativa estructurada sobre Bitcoin.</p>
+<!-- GRÁFICO BTC -->
+<div style="margin:30px auto; max-width:600px;">
+<iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_btc&symbol=BITSTAMP:BTCUSD&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=0b0f1a&studies=[]&theme=dark"
+width="100%" height="300" frameborder="0"></iframe>
+</div>
 
-<a class="button" href="capitulo1.html">Capítulo 1</a>
-<a class="button" href="capitulo2.html">Capítulo 2</a>
-<a class="button" href="capitulo3.html">Capítulo 3</a>
+<button id="connectBtn" class="button">Conectar wallet</button>
+<button id="logoutBtn" class="button logout" style="display:none;">Desconectar</button>
+
+<div id="status"></div>
+
+<div id="library" style="display:none;">
+
+<div class="chapter"><a href="capitulo1.html" style="color:white;">Capítulo 1</a></div>
+<div class="chapter"><a href="capitulo2.html" style="color:white;">Capítulo 2</a></div>
+<div class="chapter"><a href="capitulo3.html" style="color:white;">Capítulo 3</a></div>
+
+</div>
+
+<script>
+const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+const stakingABI = ["function hasAccess(address user) view returns (bool)"];
+
+async function connectWallet(){
+
+if(!window.ethereum){ alert("Necesitas MetaMask"); return;}
+
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+await provider.send("eth_requestAccounts",[]);
+const signer = provider.getSigner();
+const userAddress = await signer.getAddress();
+
+const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
+const access = await contract.hasAccess(userAddress);
+
+if(access){
+document.getElementById("status").innerHTML="Acceso activo ✔";
+document.getElementById("library").style.display="block";
+document.getElementById("connectBtn").style.display="none";
+document.getElementById("logoutBtn").style.display="inline-block";
+}else{
+document.getElementById("status").innerHTML="No tienes acceso activo";
+}
+
+}
+
+function logout(){
+document.getElementById("library").style.display="none";
+document.getElementById("connectBtn").style.display="inline-block";
+document.getElementById("logoutBtn").style.display="none";
+document.getElementById("status").innerHTML="Desconectado";
+}
+
+document.getElementById("connectBtn").onclick = connectWallet;
+document.getElementById("logoutBtn").onclick = logout;
+</script>
 
 </body>
 </html>
