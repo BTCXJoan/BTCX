@@ -65,93 +65,57 @@ width="100%" height="300" frameborder="0"></iframe>
 </div>
 
 <script>
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
 
-interface IERC20 {
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
-    function transfer(address recipient, uint256 amount) external returns (bool);
-}
+const stakingABI = [
+  "function hasAccess(address user) view returns (bool)",
+  "function stakes(address user) view returns (uint256,uint256)",
+  "function totalStaked() view returns (uint256)"
+];
 
-contract BTCXStaking {
+async function connectWallet(){
 
-    IERC20 public immutable btcx;
+  if(!window.ethereum){ alert("Necesitas MetaMask"); return;}
 
-    uint256 public constant MIN_STAKE = 2000 * 1e18;
-    uint256 public constant COOLDOWN = 7 days;
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts",[]);
+  const signer = provider.getSigner();
+  const userAddress = await signer.getAddress();
 
-    struct StakeInfo {
-        uint256 amount;
-        uint256 unstakeTime;
-    }
+  const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
 
-    mapping(address => StakeInfo) public stakes;
-    uint256 public totalStaked;
+  const access = await contract.hasAccess(userAddress);
 
-    event Staked(address indexed user, uint256 amount);
-    event UnstakeRequested(address indexed user, uint256 availableAt);
-    event Unstaked(address indexed user, uint256 amount);
+  if(access){
 
-    constructor(address _btcx) {
-        btcx = IERC20(_btcx);
-    }
+    const stakeData = await contract.stakes(userAddress);
+    const total = await contract.totalStaked();
 
-    function stake(uint256 amount) external {
-        require(amount > 0, "Amount must be > 0");
+    const userAmount = ethers.utils.formatUnits(stakeData[0],18);
+    const totalFormatted = ethers.utils.formatUnits(total,18);
 
-        btcx.transferFrom(msg.sender, address(this), amount);
+    document.getElementById("status").innerHTML =
+      "Acceso activo ✔<br>" +
+      "BTCX en staking: " + userAmount + "<br>" +
+      "Total BTCX bloqueados: " + totalFormatted;
 
-        stakes[msg.sender].amount += amount;
-        totalStaked += amount;
+    document.getElementById("library").style.display="block";
+    document.getElementById("connectBtn").style.display="none";
+    document.getElementById("logoutBtn").style.display="inline-block";
 
-        require(stakes[msg.sender].amount >= MIN_STAKE, "Below minimum stake");
+  }else{
 
-        emit Staked(msg.sender, stakes[msg.sender].amount);
-    }
+    document.getElementById("status").innerHTML="No tienes acceso activo";
 
-    function requestUnstake() external {
-        require(stakes[msg.sender].amount > 0, "Nothing staked");
-        require(stakes[msg.sender].unstakeTime == 0, "Already requested");
-
-        stakes[msg.sender].unstakeTime = block.timestamp + COOLDOWN;
-
-        emit UnstakeRequested(msg.sender, stakes[msg.sender].unstakeTime);
-    }
-
-    function unstake() external {
-        StakeInfo memory info = stakes[msg.sender];
-
-        require(info.unstakeTime > 0, "Unstake not requested");
-        require(block.timestamp >= info.unstakeTime, "Cooldown active");
-
-        uint256 amount = info.amount;
-
-        delete stakes[msg.sender];
-        totalStaked -= amount;
-
-        btcx.transfer(msg.sender, amount);
-
-        emit Unstaked(msg.sender, amount);
-    }
-
-    function hasAccess(address user) external view returns (bool) {
-        return stakes[user].amount >= MIN_STAKE && stakes[user].unstakeTime == 0;
-
-}else{
-
-document.getElementById("status").innerHTML="No tienes acceso activo";
-
-}
+  }
 
 }
 
 function logout(){
-
-document.getElementById("library").style.display="none";
-document.getElementById("connectBtn").style.display="inline-block";
-document.getElementById("logoutBtn").style.display="none";
-document.getElementById("status").innerHTML="Desconectado";
-
+  document.getElementById("library").style.display="none";
+  document.getElementById("connectBtn").style.display="inline-block";
+  document.getElementById("logoutBtn").style.display="none";
+  document.getElementById("status").innerHTML="Desconectado";
 }
 
 document.getElementById("connectBtn").onclick = connectWallet;
