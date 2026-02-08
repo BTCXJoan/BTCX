@@ -3,20 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <title>BTCX Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
+
 <body style="background:#0b0f1a;color:white;text-align:center;font-family:Arial;padding:40px;">
 
-<h2>Panel BTCX</h2>
+<h2>BTCX Panel</h2>
 
 <div id="btcPrice">Cargando precio...</div>
+<br>
+<div id="userData">Cargando datos de staking...</div>
+
+<br>
+<a href="index.html" style="color:white;">← Volver al inicio</a>
 
 <script>
+
+const stakingAddress="0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+
+const stakingABI=[
+ "function hasAccess(address user) view returns(bool)",
+ "function stakes(address user) view returns(uint256,uint256)",
+ "function totalStaked() view returns(uint256)"
+];
+
+// Precio BTC
 async function loadBTC(){
  const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
  const d=await r.json();
  document.getElementById("btcPrice").innerHTML="BTC/USD: "+d.bitcoin.usd;
 }
+
+// Datos usuario
+async function loadUser(){
+
+ if(!window.ethereum){
+   document.getElementById("userData").innerHTML="MetaMask no detectado";
+   return;
+ }
+
+ const provider=new ethers.providers.Web3Provider(window.ethereum);
+ const signer=provider.getSigner();
+ const address=await signer.getAddress();
+
+ const contract=new ethers.Contract(stakingAddress,stakingABI,provider);
+
+ const access=await contract.hasAccess(address);
+
+ if(!access){
+   document.getElementById("userData").innerHTML="No tienes acceso activo";
+   return;
+ }
+
+ const stake=await contract.stakes(address);
+ const total=await contract.totalStaked();
+
+ const amount=ethers.utils.formatUnits(stake[0],18);
+ const totalFormatted=ethers.utils.formatUnits(total,18);
+
+ document.getElementById("userData").innerHTML=
+ "BTCX en staking: "+amount+"<br>Total BTCX bloqueados: "+totalFormatted;
+}
+
 loadBTC();
+loadUser();
+
 </script>
 
 </body>
