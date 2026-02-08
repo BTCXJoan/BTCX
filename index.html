@@ -86,11 +86,8 @@ const access = await contract.hasAccess(userAddress);
 
 if(access){
 
-const amount = await contract.stakedAmount(userAddress);
-const formatted = ethers.utils.formatUnits(amount,18);
-
 document.getElementById("status").innerHTML =
-"Acceso activo ✔<br>BTCX en staking: " + formatted;
+"Acceso activo ✔";
 
 document.getElementById("library").style.display="block";
 document.getElementById("connectBtn").style.display="none";
