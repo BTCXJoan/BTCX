@@ -7,201 +7,187 @@
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
-body {
-  background:#0b0f1a;
-  color:white;
-  font-family:Arial;
-  text-align:center;
-  padding:40px;
-}
-
+body { background:#0b0f1a; color:white; font-family:Arial; text-align:center; padding:40px; }
 .logo { width:140px; margin-bottom:20px; }
 
-.priceBox {
-  font-size:32px;
-  font-weight:bold;
-  margin:20px 0;
-}
-
-.tableWrap {
-  max-width:650px;
-  margin:20px auto;
-  background:#111827;
-  padding:15px;
-  border-radius:10px;
-}
-
-table {
-  width:100%;
-  border-collapse:collapse;
-}
-
-th, td {
-  padding:8px;
-  border-bottom:1px solid #333;
-}
-
 .button {
-  margin:10px;
-  padding:14px;
-  background:#2563eb;
-  border:none;
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
-  display:block;
-  width:320px;
-  margin-left:auto;
-  margin-right:auto;
-  text-decoration:none;
+  margin:12px auto; padding:14px; background:#2563eb; border:none;
+  color:white; border-radius:8px; cursor:pointer; display:block;
+  width:320px; text-decoration:none;
+}
+.logout { background:#444; }
+
+.panel {
+  max-width:650px; margin:20px auto; background:#111827;
+  padding:18px; border-radius:10px; text-align:left;
 }
 
-.logout { background:#444; }
+.priceBox { font-size:30px; font-weight:bold; margin:15px 0; }
+
+.tableWrap { max-width:650px; margin:20px auto; background:#111827; padding:15px; border-radius:10px; }
+table { width:100%; border-collapse:collapse; }
+th, td { padding:8px; border-bottom:1px solid #333; }
 </style>
 </head>
 <body>
 
-<img src="btcx-logo.png" class="logo">
-<h2>BTCX — Biblioteca Bitcoin</h2>
-
-<div id="btcPrice" class="priceBox">Cargando precio BTC...</div>
-
-<!-- GRÁFICO BTC -->
-<div style="margin:30px auto; max-width:650px;">
-<iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP:BTCUSD&interval=D&theme=dark"
-width="100%" height="320" frameborder="0"></iframe>
+<!-- PANTALLA PÚBLICA -->
+<div id="publicView">
+  <img src="btcx-logo.png" class="logo">
+  <h2>BTCX — Biblioteca Bitcoin</h2>
+  <button id="connectBtn" class="button">Conectar wallet</button>
 </div>
 
-<div class="tableWrap">
-<h3>Máximos y mínimos por año</h3>
-<table id="yearTable">
-<thead>
-<tr>
-<th>Año</th>
-<th>Máximo (USD)</th>
-<th>Mínimo (USD)</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</div>
+<!-- DASHBOARD PRIVADO -->
+<div id="privateView" style="display:none;">
 
-<button id="connectBtn" class="button">Conectar wallet</button>
-<button id="logoutBtn" class="button logout" style="display:none;">Desconectar</button>
+  <img src="btcx-logo.png" class="logo">
+  <h2>BTCX — Dashboard</h2>
 
-<div id="status"></div>
+  <div id="btcPrice" class="priceBox">Cargando precio BTC...</div>
 
-<div id="library" style="display:none;">
-<a class="button" href="capitulo1.html">Capítulo 1 — Qué es Bitcoin y por qué importa</a>
-<a class="button" href="capitulo2.html">Capítulo 2 — Por qué existe Bitcoin</a>
-<a class="button" href="capitulo3.html">Capítulo 3 — Qué significa poseer Bitcoin</a>
+  <div style="margin:20px auto; max-width:650px;">
+    <iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP:BTCUSD&interval=D&theme=dark"
+    width="100%" height="320" frameborder="0"></iframe>
+  </div>
+
+  <div class="panel">
+    <h3>Tu estado BTCX</h3>
+    <div id="userPanel"></div>
+  </div>
+
+  <div class="tableWrap">
+    <h3>Máximos y mínimos por año</h3>
+    <table id="yearTable">
+      <thead><tr><th>Año</th><th>Máximo</th><th>Mínimo</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <a class="button" href="capitulo1.html">Capítulo 1 — Qué es Bitcoin y por qué importa</a>
+  <a class="button" href="capitulo2.html">Capítulo 2 — Por qué existe Bitcoin</a>
+  <a class="button" href="capitulo3.html">Capítulo 3 — Qué significa poseer Bitcoin</a>
+
+  <button id="logoutBtn" class="button logout">Desconectar</button>
+
 </div>
 
 <script>
-// ====== PRECIO ACTUAL BTC ======
+// ===== BTC APIs =====
 async function loadBTCPrice(){
   try{
-    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
-    const data = await res.json();
-    const price = data.bitcoin.usd.toLocaleString();
-    document.getElementById("btcPrice").innerHTML = "BTC/USD: $" + price;
+    const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
+    const d=await r.json();
+    document.getElementById("btcPrice").innerHTML="BTC/USD: $"+d.bitcoin.usd.toLocaleString();
   }catch(e){
-    document.getElementById("btcPrice").innerHTML = "No se pudo cargar el precio";
+    document.getElementById("btcPrice").innerHTML="No se pudo cargar el precio";
   }
 }
 
-// ====== MAX/MIN POR AÑO ======
 async function loadYearStats(){
   try{
-    const res = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max");
-    const data = await res.json();
-    const prices = data.prices;
-
-    const byYear = {};
-    prices.forEach(p=>{
-      const d = new Date(p[0]);
-      const y = d.getFullYear();
-      const price = p[1];
+    const r=await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max");
+    const d=await r.json();
+    const byYear={};
+    d.prices.forEach(p=>{
+      const y=new Date(p[0]).getFullYear();
+      const price=p[1];
       if(!byYear[y]) byYear[y]={max:price,min:price};
       if(price>byYear[y].max) byYear[y].max=price;
       if(price<byYear[y].min) byYear[y].min=price;
     });
-
-    const years = Object.keys(byYear).slice(-5); // últimos 5 años
-    const tbody = document.querySelector("#yearTable tbody");
+    const years=Object.keys(byYear).slice(-5);
+    const tbody=document.querySelector("#yearTable tbody");
+    tbody.innerHTML="";
     years.forEach(y=>{
-      const row = `<tr>
+      tbody.innerHTML+=`<tr>
         <td>${y}</td>
         <td>$${byYear[y].max.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
         <td>$${byYear[y].min.toLocaleString(undefined,{maximumFractionDigits:0})}</td>
       </tr>`;
-      tbody.innerHTML += row;
     });
-
   }catch(e){
-    console.log(e);
+    console.log("Error cargando stats:",e);
   }
 }
 
-// ====== WEB3 ACCESO ======
-const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+// ===== Web3 =====
+const stakingAddress="0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+const TOTAL_SUPPLY=10000000;
 
-const stakingABI = [
-  "function hasAccess(address user) view returns (bool)",
-  "function stakes(address user) view returns (uint256,uint256)",
-  "function totalStaked() view returns (uint256)"
+const stakingABI=[
+ "function hasAccess(address user) view returns(bool)",
+ "function stakes(address user) view returns(uint256,uint256)",
+ "function totalStaked() view returns(uint256)"
 ];
 
 async function connectWallet(){
-  if(!window.ethereum){ alert("Necesitas MetaMask"); return;}
+ if(!window.ethereum){alert("Necesitas MetaMask");return;}
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts",[]);
-  const signer = provider.getSigner();
-  const userAddress = await signer.getAddress();
+ const provider=new ethers.providers.Web3Provider(window.ethereum);
+ await provider.send("eth_requestAccounts",[]);
+ const signer=provider.getSigner();
+ const user=await signer.getAddress();
 
-  const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
-  const access = await contract.hasAccess(userAddress);
+ const c=new ethers.Contract(stakingAddress,stakingABI,provider);
+ const access=await c.hasAccess(user);
 
-  if(access){
-    localStorage.setItem("btcxConnected","true");
+ if(!access){
+   alert("No tienes acceso activo (stake mínimo requerido).");
+   return;
+ }
 
-    const stakeData = await contract.stakes(userAddress);
-    const total = await contract.totalStaked();
+ localStorage.setItem("btcxConnected","true");
 
-    const userAmount = ethers.utils.formatUnits(stakeData[0],18);
-    const totalFormatted = ethers.utils.formatUnits(total,18);
+ const s=await c.stakes(user);
+ const total=await c.totalStaked();
 
-    document.getElementById("status").innerHTML =
-      "Acceso activo ✔<br>" +
-      "BTCX en staking: " + userAmount + "<br>" +
-      "Total BTCX bloqueados: " + totalFormatted;
+ const userAmount=parseFloat(ethers.utils.formatUnits(s[0],18));
+ const totalAmount=parseFloat(ethers.utils.formatUnits(total,18));
+ const pct=((totalAmount/TOTAL_SUPPLY)*100).toFixed(4);
 
-    document.getElementById("library").style.display="block";
-    document.getElementById("connectBtn").style.display="none";
-    document.getElementById("logoutBtn").style.display="inline-block";
-  }else{
-    document.getElementById("status").innerHTML="No tienes acceso activo";
-  }
+ let cooldownText="Sin solicitud de retirada";
+ if(s[1]>0){
+   const now=Math.floor(Date.now()/1000);
+   if(now < s[1]){
+     const sec=s[1]-now;
+     const days=Math.floor(sec/86400);
+     const hrs=Math.floor((sec%86400)/3600);
+     cooldownText=Cooldown activo: ${days}d ${hrs}h;
+   }else{
+     cooldownText="Puedes retirar (cooldown completado)";
+   }
+ }
+
+ document.getElementById("userPanel").innerHTML=
+ `Acceso: Activo ✔<br>
+  BTCX en staking: ${userAmount}<br>
+  Total BTCX bloqueados: ${totalAmount}<br>
+  % suministro bloqueado: ${pct}%<br>
+  ${cooldownText}`;
+
+ // Mostrar panel privado
+ document.getElementById("publicView").style.display="none";
+ document.getElementById("privateView").style.display="block";
+
+ // Cargar datos BTC SOLO cuando hay acceso
+ loadBTCPrice();
+ loadYearStats();
 }
 
 function logout(){
-  localStorage.removeItem("btcxConnected");
-  document.getElementById("library").style.display="none";
-  document.getElementById("connectBtn").style.display="inline-block";
-  document.getElementById("logoutBtn").style.display="none";
-  document.getElementById("status").innerHTML="Desconectado";
+ localStorage.removeItem("btcxConnected");
+ document.getElementById("privateView").style.display="none";
+ document.getElementById("publicView").style.display="block";
 }
 
-document.getElementById("connectBtn").onclick = connectWallet;
-document.getElementById("logoutBtn").onclick = logout;
+document.getElementById("connectBtn").onclick=connectWallet;
+document.getElementById("logoutBtn").onclick=logout;
 
-window.onload = async ()=>{
-  loadBTCPrice();
-  loadYearStats();
-  if(localStorage.getItem("btcxConnected")==="true"){
-    await connectWallet();
-  }
+window.onload=async()=>{
+ if(localStorage.getItem("btcxConnected")==="true"){
+   await connectWallet();
+ }
 };
 </script>
 
