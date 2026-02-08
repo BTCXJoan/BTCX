@@ -28,31 +28,26 @@ body {
   color:white;
   border-radius:8px;
   cursor:pointer;
+  display:block;
+  width:260px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .logout {
   background:#444;
 }
-
-.chapter {
-  margin:15px auto;
-  padding:15px;
-  width:260px;
-  background:#111827;
-  border-radius:8px;
-}
 </style>
 </head>
-
 <body>
 
 <img src="btcx-logo.png" class="logo">
 
 <h2>BTCX — Biblioteca Bitcoin</h2>
 
-<!-- GRÁFICO BTC -->
+<!-- GRAFICO BTC -->
 <div style="margin:30px auto; max-width:600px;">
-<iframe src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_btc&symbol=BITSTAMP:BTCUSD&interval=D&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=0b0f1a&studies=[]&theme=dark"
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP:BTCUSD&interval=D&theme=dark"
 width="100%" height="300" frameborder="0"></iframe>
 </div>
 
@@ -63,15 +58,19 @@ width="100%" height="300" frameborder="0"></iframe>
 
 <div id="library" style="display:none;">
 
-<div class="chapter"><a href="capitulo1.html" style="color:white;">Capítulo 1</a></div>
-<div class="chapter"><a href="capitulo2.html" style="color:white;">Capítulo 2</a></div>
-<div class="chapter"><a href="capitulo3.html" style="color:white;">Capítulo 3</a></div>
+<a class="button" href="capitulo1.html">Capítulo 1</a>
+<a class="button" href="capitulo2.html">Capítulo 2</a>
+<a class="button" href="capitulo3.html">Capítulo 3</a>
 
 </div>
 
 <script>
 const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-const stakingABI = ["function hasAccess(address user) view returns (bool)"];
+
+const stakingABI = [
+  "function hasAccess(address user) view returns (bool)",
+  "function stakedAmount(address user) view returns (uint256)"
+];
 
 async function connectWallet(){
 
@@ -83,24 +82,36 @@ const signer = provider.getSigner();
 const userAddress = await signer.getAddress();
 
 const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
+
 const access = await contract.hasAccess(userAddress);
 
 if(access){
-document.getElementById("status").innerHTML="Acceso activo ✔";
+
+const amount = await contract.stakedAmount(userAddress);
+const formatted = ethers.utils.formatUnits(amount,18);
+
+document.getElementById("status").innerHTML =
+"Acceso activo ✔<br>BTCX en staking: " + formatted;
+
 document.getElementById("library").style.display="block";
 document.getElementById("connectBtn").style.display="none";
 document.getElementById("logoutBtn").style.display="inline-block";
+
 }else{
+
 document.getElementById("status").innerHTML="No tienes acceso activo";
+
 }
 
 }
 
 function logout(){
+
 document.getElementById("library").style.display="none";
 document.getElementById("connectBtn").style.display="inline-block";
 document.getElementById("logoutBtn").style.display="none";
 document.getElementById("status").innerHTML="Desconectado";
+
 }
 
 document.getElementById("connectBtn").onclick = connectWallet;
