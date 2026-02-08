@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BTCX - Capítulo 2</title>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<style>
+body { background:#0b0f1a; color:white; font-family:Arial; max-width:700px; margin:auto; padding:40px;}
+a { color:#60a5fa; }
+</style>
+</head>
+
+<body>
+
+<h1>Capítulo 2 — ¿Por qué existe Bitcoin?</h1>
+
+<div id="content"></div>
+
+<script>
+const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+const stakingABI = ["function hasAccess(address user) view returns (bool)"];
+
+async function checkAccess() {
+
+ if(!window.ethereum){ alert("Necesitas MetaMask"); return;}
+
+ const provider = new ethers.providers.Web3Provider(window.ethereum);
+ await provider.send("eth_requestAccounts", []);
+ const signer = provider.getSigner();
+ const userAddress = await signer.getAddress();
+
+ const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
+ const access = await contract.hasAccess(userAddress);
+
+ if(access){
+
+ document.getElementById("content").innerHTML = `
+ <p>Bitcoin nace en 2009 tras la crisis financiera global de 2008.</p>
+
+ <p>Su objetivo era crear un sistema monetario que no dependiera de la confianza en bancos o gobiernos.</p>
+
+ <p>Bitcoin funciona mediante reglas transparentes escritas en código y verificables por cualquiera.</p>
+
+ <p>La emisión de nuevos bitcoins es predecible y no puede modificarse arbitrariamente.</p>
+
+ <p>Esto introduce por primera vez un activo digital verdaderamente escaso.</p>
+
+ <br>
+ <a href="capitulo1.html">← Capítulo anterior</a>
+ <br><br>
+ <a href="capitulo3.html">Siguiente capítulo →</a>
+ `;
+ } else {
+ document.getElementById("content").innerHTML = "<p>Acceso no activo.</p>";
+ }
+}
+
+checkAccess();
+</script>
+
+</body>
+</html>
