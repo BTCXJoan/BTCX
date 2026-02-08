@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BTCX Panel</title>
+</head>
+<body style="background:#0b0f1a;color:white;text-align:center;font-family:Arial;padding:40px;">
+
+<h2>Panel BTCX</h2>
+
+<div id="btcPrice">Cargando precio...</div>
+
+<script>
+async function loadBTC(){
+ const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
+ const d=await r.json();
+ document.getElementById("btcPrice").innerHTML="BTC/USD: "+d.bitcoin.usd;
+}
+loadBTC();
+</script>
+
+</body>
+</html>
