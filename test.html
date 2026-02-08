@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+
+<h2>Test conexión wallet</h2>
+
+<button onclick="connect()">Conectar</button>
+
+<div id="result"></div>
+
+<script>
+async function connect(){
+
+  if(!window.ethereum){
+    document.getElementById("result").innerHTML="No detecto MetaMask";
+    return;
+  }
+
+  try{
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts",[]);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    document.getElementById("result").innerHTML="Conectado: "+address;
+  }catch(e){
+    document.getElementById("result").innerHTML="Error: "+e;
+  }
+}
+</script>
+
+</body>
+</html>
