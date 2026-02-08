@@ -2,19 +2,91 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>BTCX</title>
+<title>BTCX — Biblioteca Bitcoin</title>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<style>
+body{
+  background:#f5f5f7;
+  color:#111;
+  font-family:-apple-system,BlinkMacSystemFont,Arial;
+  text-align:center;
+  padding:60px 20px;
+}
+
+.logo{
+  width:120px;
+  margin-bottom:20px;
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+}
+
+h1{
+  font-weight:600;
+}
+
+.subtitle{
+  color:#555;
+  margin-bottom:30px;
+}
+
+.button{
+  display:block;
+  width:100%;
+  max-width:320px;
+  margin:10px auto;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  background:#0071e3;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.secondary{
+  background:white;
+  color:#0071e3;
+  border:1px solid #0071e3;
+}
+
+.box{
+  background:white;
+  padding:18px;
+  border-radius:12px;
+  margin:25px 0;
+}
+</style>
 </head>
 
-<body style="background:#0b0f1a;color:white;text-align:center;font-family:Arial;padding:40px;">
+<body>
 
-<h2>BTCX — Biblioteca Bitcoin</h2>
+<div class="container">
 
-<p>Acceso mediante staking mínimo de 2.000 BTCX</p>
+<img src="btcx-logo.png" class="logo">
 
-<button onclick="connect()">Conectar wallet</button>
+<h1>BTCX</h1>
+
+<div class="subtitle">
+Academia Bitcoin con acceso mediante staking
+</div>
+
+<div class="box">
+Para acceder al contenido necesitas mantener
+<strong>2.000 BTCX</strong> en staking.
+</div>
+
+<button class="button" onclick="connect()">Conectar wallet</button>
+
+<a class="button secondary" href="comprar.html">Comprar acceso (2000 BTCX)</a>
 
 <div id="status"></div>
+
+</div>
 
 <script>
 
@@ -27,7 +99,7 @@ const stakingABI=[
 async function connect(){
 
  if(!window.ethereum){
-   document.getElementById("status").innerHTML="MetaMask no detectado";
+   document.getElementById("status").innerHTML="Instala MetaMask";
    return;
  }
 
@@ -41,10 +113,10 @@ async function connect(){
 
  if(access){
    document.getElementById("status").innerHTML=
-   "Acceso activo ✔<br><br><a href='panel.html' style='color:white;'>Entrar al panel BTCX</a>";
+   "Acceso activo ✔<br><br><a href='panel.html'>Entrar al panel</a>";
  }else{
    document.getElementById("status").innerHTML=
-   "Wallet conectada pero sin staking activo";
+   "Wallet conectada pero sin staking activo.";
  }
 
 }
