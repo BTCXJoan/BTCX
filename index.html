@@ -41,7 +41,8 @@ const contract=new ethers.Contract(stakingAddress,stakingABI,provider);
 const access=await contract.hasAccess(address);
 
 if(access){
- document.getElementById("status").innerHTML+="<br>Acceso activo ✔";
+ document.getElementById("status").innerHTML+="<br>Acceso activo ✔<br><br><a href='panel.html'>Entrar al panel BTCX</a>";
+}
 }else{
  document.getElementById("status").innerHTML+="<br>No hay staking activo";
 }
