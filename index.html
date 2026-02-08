@@ -5,9 +5,12 @@
 <title>BTCX</title>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
+
 <body style="background:#0b0f1a;color:white;text-align:center;font-family:Arial;padding:40px;">
 
 <h2>BTCX — Biblioteca Bitcoin</h2>
+
+<p>Acceso mediante staking mínimo de 2.000 BTCX</p>
 
 <button onclick="connect()">Conectar wallet</button>
 
@@ -23,33 +26,26 @@ const stakingABI=[
 
 async function connect(){
 
-if(!window.ethereum){
- document.getElementById("status").innerHTML="MetaMask no detectado";
- return;
-}
+ if(!window.ethereum){
+   document.getElementById("status").innerHTML="MetaMask no detectado";
+   return;
+ }
 
-try{
+ const provider=new ethers.providers.Web3Provider(window.ethereum);
+ await provider.send("eth_requestAccounts",[]);
+ const signer=provider.getSigner();
+ const address=await signer.getAddress();
 
-const provider=new ethers.providers.Web3Provider(window.ethereum);
-await provider.send("eth_requestAccounts",[]);
-const signer=provider.getSigner();
-const address=await signer.getAddress();
+ const contract=new ethers.Contract(stakingAddress,stakingABI,provider);
+ const access=await contract.hasAccess(address);
 
-document.getElementById("status").innerHTML="Wallet conectada: "+address;
-
-const contract=new ethers.Contract(stakingAddress,stakingABI,provider);
-const access=await contract.hasAccess(address);
-
-if(access){
- document.getElementById("status").innerHTML+="<br>Acceso activo ✔<br><br><a href='panel.html'>Entrar al panel BTCX</a>";
-}
-}else{
- document.getElementById("status").innerHTML+="<br>No hay staking activo";
-}
-
-}catch(e){
- document.getElementById("status").innerHTML="Error: "+e;
-}
+ if(access){
+   document.getElementById("status").innerHTML=
+   "Acceso activo ✔<br><br><a href='panel.html' style='color:white;'>Entrar al panel BTCX</a>";
+ }else{
+   document.getElementById("status").innerHTML=
+   "Wallet conectada pero sin staking activo";
+ }
 
 }
 
