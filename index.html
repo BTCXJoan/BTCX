@@ -131,17 +131,57 @@
 
       if (access) {
         content.innerHTML =
-          "<h2>Acceso activo</h2>" +
+          content.innerHTML =
+
+"<h2>Acceso activo</h2>" +
 
 "<h3>Capítulo 1 — ¿Qué es Bitcoin y por qué importa?</h3>" +
-"<p>Bitcoin es un sistema de dinero digital descentralizado que permite transferir valor sin intermediarios. No pertenece a ninguna empresa ni gobierno y su oferta está limitada a 21 millones.</p>" +
+
+"<p><strong>Introducción</strong></p>" +
+"<p>Bitcoin no es una acción, no es una empresa y no es una promesa de rentabilidad. Bitcoin es, ante todo, una herramienta creada para transferir valor por internet sin intermediarios.</p>" +
+
+"<p><strong>El problema que intenta resolver</strong></p>" +
+"<p>Hoy en día, casi todo el dinero es digital, pero depende de bancos y sistemas centralizados. Bitcoin nace como una alternativa que permite transferir valor sin permisos.</p>" +
+
+"<p><strong>Qué es Bitcoin</strong></p>" +
+"<p>Es un sistema de dinero digital descentralizado con reglas públicas que nadie puede modificar unilateralmente.</p>" +
+
+"<p><strong>Oferta limitada</strong></p>" +
+"<p>Nunca existirán más de 21 millones de bitcoins, algo verificable por cualquiera.</p>" +
+
+"<p><em>Bitcoin no promete rentabilidad. Ofrece un sistema alternativo verificable.</em></p>" +
+
 
 "<h3>Capítulo 2 — ¿Por qué existe Bitcoin?</h3>" +
-"<p>Bitcoin nace tras la crisis financiera de 2008 como una alternativa basada en reglas transparentes y previsibles, donde nadie puede alterar la emisión de dinero.</p>" +
+
+"<p><strong>Contexto</strong></p>" +
+"<p>Bitcoin aparece tras la crisis financiera de 2008 como respuesta a la falta de confianza en el sistema bancario tradicional.</p>" +
+
+"<p><strong>Un sistema basado en reglas</strong></p>" +
+"<p>Las reglas están escritas en código y se aplican a todos por igual.</p>" +
+
+"<p><strong>Emisión predecible</strong></p>" +
+"<p>Bitcoin introduce un dinero cuya oferta no puede alterarse arbitrariamente.</p>" +
+
+"<p><strong>Resistencia a censura</strong></p>" +
+"<p>Permite transferencias sin permisos ni intermediarios.</p>" +
+
+"<p><em>Bitcoin no pretende sustituir el sistema actual, sino ofrecer una alternativa.</em></p>" +
+
 
 "<h3>Capítulo 3 — ¿Qué significa realmente poseer Bitcoin?</h3>" +
-"<p>Poseer Bitcoin significa controlar las claves privadas que permiten mover los fondos. Una wallet no guarda el Bitcoin, guarda las llaves que demuestran propiedad.</p>";
 
+"<p><strong>Propiedad real</strong></p>" +
+"<p>Poseer Bitcoin significa controlar las claves privadas que permiten mover los fondos.</p>" +
+
+"<p><strong>Qué es una wallet</strong></p>" +
+"<p>Una wallet gestiona claves privadas, no guarda los bitcoins físicamente.</p>" +
+
+"<p><strong>Custodia vs autocustodia</strong></p>" +
+"<p>En custodia dependes de terceros. En autocustodia tienes control total y responsabilidad.</p>" +
+
+"<p><strong>Importancia</strong></p>" +
+"<p>Comprender esto es entender la esencia de Bitcoin: control, responsabilidad y libertad de elección.</p>";
         document.getElementById("connectBtn").style.display = "none";
       } else {
         content.innerHTML =
