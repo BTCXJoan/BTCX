@@ -7,14 +7,23 @@
 
 <style>
 body {
-  background:#0b0f1a;
+  background:#000000;
   color:white;
-  font-family:Arial;
+  font-family:-apple-system,BlinkMacSystemFont,Arial;
   text-align:center;
   padding:40px;
 }
 
-.logo { width:120px; margin-bottom:10px; }
+.logo{
+  width:140px;
+  margin-bottom:10px;
+  transition: all 0.4s ease;
+}
+
+.logo:hover{
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(37,99,235,0.6));
+}
 
 .panel {
   max-width:650px;
@@ -38,21 +47,14 @@ body {
   margin-right:auto;
   text-decoration:none;
 }
-
-.priceBox {
-  font-size:26px;
-  margin:20px 0;
-}
 </style>
 </head>
 
 <body>
 
-<img src="btcx-logo.png" class="logo">
+<img src="btcx-logo-energia.jpeg" class="logo">
 
 <h2>BTCX Dashboard</h2>
-
-<div id="btcPrice" class="priceBox">Cargando precio...</div>
 
 <div style="max-width:650px;margin:auto;">
 <iframe src="https://s.tradingview.com/widgetembed/?symbol=BITSTAMP:BTCUSD&interval=D&theme=dark"
@@ -82,12 +84,6 @@ const stakingABI=[
  "function stakes(address user) view returns(uint256,uint256)",
  "function totalStaked() view returns(uint256)"
 ];
-
-async function loadBTC(){
- const r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd");
- const d=await r.json();
- document.getElementById("btcPrice").innerHTML="BTC/USD: $"+d.bitcoin.usd.toLocaleString();
-}
 
 async function loadUser(){
 
@@ -120,7 +116,6 @@ async function loadUser(){
  "<br>Total BTCX bloqueados: "+totalFormatted;
 }
 
-loadBTC();
 loadUser();
 
 </script>
