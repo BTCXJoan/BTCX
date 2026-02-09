@@ -4,11 +4,9 @@
 <meta charset="UTF-8">
 <title>BTCX — Biblioteca Bitcoin</title>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<div class="subtitle">
-BTCX Academy — Educación Bitcoin práctica<br>
-Fundado por Joan Salvatella
-</div>
+
 <style>
+
 body{
   background:#0b0f1a;
   color:white;
@@ -17,22 +15,13 @@ body{
   padding:60px 20px;
 }
 
-.logo{
-  width:120px;
-  margin-bottom:20px;
-}
-
 .container{
   max-width:520px;
   margin:auto;
 }
 
-h1{
-  font-weight:600;
-}
-
-.subtitle{
-  color:#9ca3af;
+.logo{
+  width:140px;
   margin-bottom:30px;
 }
 
@@ -63,6 +52,13 @@ h1{
   border-radius:12px;
   margin:25px 0;
 }
+
+.footer{
+  margin-top:90px;
+  font-size:13px;
+  color:#9ca3af;
+}
+
 </style>
 </head>
 
@@ -72,15 +68,8 @@ h1{
 
 <img src="btcx-logo.png" class="logo">
 
-<h1>BTCX</h1>
-
-<div class="subtitle">
-Academia Bitcoin con acceso mediante staking
-</div>
-
 <div class="box">
-Para acceder al contenido necesitas mantener
-<strong>2.000 BTCX</strong> en staking.
+Acceso al contenido mediante staking mínimo de <strong>2.000 BTCX</strong>
 </div>
 
 <button class="button" onclick="connect()">Conectar wallet</button>
@@ -90,6 +79,11 @@ Para acceder al contenido necesitas mantener
 <div id="status"></div>
 
 </div>
+
+<footer class="footer">
+BTCX Academy — Educación Bitcoin práctica<br>
+Fundado por Joan Salvatella
+</footer>
 
 <script>
 
@@ -116,7 +110,7 @@ async function connect(){
 
  if(access){
    document.getElementById("status").innerHTML=
-   "Acceso activo ✔<br><br><a href='panel.html'>Entrar al panel</a>";
+   "Acceso activo ✔<br><br><a href='panel.html' style='color:white;'>Entrar al panel</a>";
  }else{
    document.getElementById("status").innerHTML=
    "Wallet conectada pero sin staking activo.";
