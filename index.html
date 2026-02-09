@@ -8,7 +8,7 @@
 <style>
 
 body{
-  background:#0b0f1a;
+  background:#000000;
   color:white;
   font-family:-apple-system,BlinkMacSystemFont,Arial;
   text-align:center;
@@ -21,8 +21,14 @@ body{
 }
 
 .logo{
-  width:140px;
+  width:160px;
   margin-bottom:30px;
+  transition: all 0.4s ease;
+}
+
+.logo:hover{
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(37,99,235,0.6));
 }
 
 .button{
