@@ -110,6 +110,10 @@ async function buyAccess() {
   await approveTx.wait();
 
   document.getElementById("status").innerText = "Comprando BTCX...";
+  
+  setTimeout(() => {
+  window.location.href = "index.html";
+}, 2000);
 
   const buyTx = await sale.buy(btcxAmount);
   await buyTx.wait();
