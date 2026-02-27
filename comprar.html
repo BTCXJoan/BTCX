@@ -101,8 +101,8 @@ async function buyAccess() {
   const usdc = new ethers.Contract(usdcAddress, usdcABI, signer);
   const sale = new ethers.Contract(saleAddress, saleABI, signer);
 
-  const usdcAmount = ethers.utils.parseUnits("20", 6);
-  const btcxAmount = ethers.utils.parseUnits("200", 18);
+  const usdcAmount = ethers.utils.parseUnits("200", 6);
+  const btcxAmount = ethers.utils.parseUnits("2000", 18);
 
   document.getElementById("status").innerText = "Aprobando USDC...";
 
