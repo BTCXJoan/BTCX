@@ -1,29 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Comprar BTCX</title>
+<title>Comprar acceso - BTCX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<style>
+body {
+  background: #0d1117;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+
+button {
+  background: #1f6feb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.box {
+  margin-top: 30px;
+  padding: 20px;
+  background: #161b22;
+  border-radius: 8px;
+}
+</style>
 </head>
-<body style="font-family:Arial;text-align:center;padding:40px">
 
-<h2>Comprar acceso BTCX</h2>
+<body>
 
-<p>Precio actual: <strong>200 € (200 USDC)</strong></p>
+<div class="container">
 
+<h1>Acceso BTCX Academy</h1>
+
+<div class="box">
 <p>
-Envía 200 USDC en Polygon a esta dirección:
+Estás a punto de adquirir acceso a la biblioteca privada BTCX.
 </p>
 
 <p>
-<strong>TU DIRECCIÓN AQUÍ</strong>
+Precio: <strong>200 USDC</strong>
 </p>
 
 <p>
-Tras recibir el pago recibirás 2000 BTCX.
+Recibirás: <strong>2.000 BTCX</strong>
 </p>
 
-<br>
-<a href="index.html">← Volver</a>
+<p>
+Necesitarás mantener los 2.000 BTCX en staking para acceder al contenido.
+</p>
+
+<button onclick="buyAccess()">Confirmar compra</button>
+
+<p id="status"></p>
+</div>
+
+</div>
+
+<script>
+
+const saleAddress = "0xE45726499D02634609e0a1a90E3D40F68D08e565";
+const usdcAddress = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359";
+
+const saleABI = [
+  "function buy(uint256 amount) external",
+];
+
+const usdcABI = [
+  "function approve(address spender, uint256 amount) external returns (bool)"
+];
+
+async function buyAccess() {
+
+  if (!window.ethereum) {
+    alert("Necesitas MetaMask");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+
+  const usdc = new ethers.Contract(usdcAddress, usdcABI, signer);
+  const sale = new ethers.Contract(saleAddress, saleABI, signer);
+
+  const usdcAmount = ethers.utils.parseUnits("200", 6);
+  const btcxAmount = ethers.utils.parseUnits("2000", 18);
+
+  document.getElementById("status").innerText = "Aprobando USDC...";
+
+  const approveTx = await usdc.approve(saleAddress, usdcAmount);
+  await approveTx.wait();
+
+  document.getElementById("status").innerText = "Comprando BTCX...";
+
+  const buyTx = await sale.buy(btcxAmount);
+  await buyTx.wait();
+
+  document.getElementById("status").innerText = "Compra completada ✔";
+
+}
+
+</script>
 
 </body>
 </html>
