@@ -17,43 +17,66 @@ body {
 .container {
   max-width: 1000px;
   margin: auto;
-  padding: 40px 20px;
+  padding: 40px 20px 80px 20px;
 }
 
+/* LOGO GRANDE PROTAGONISTA */
 .logo {
-  width: 280px;
-  max-width: 90%;
+  width: 420px;
+  max-width: 95%;
   height: auto;
   display: block;
-  margin: 60px auto 20px auto;
-  filter: drop-shadow(0 0 25px rgba(0, 170, 255, 0.25));
+  margin: 80px auto 30px auto;
+  filter: drop-shadow(0 0 35px rgba(0, 170, 255, 0.35));
 }
 
+/* SUBTITULO */
 .subtitle {
-  font-size: 18px;
+  font-size: 20px;
   color: #8b949e;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
+/* PRECIO */
+.price {
+  font-size: 18px;
+  margin-bottom: 40px;
+  color: #c9d1d9;
+}
+
+.price strong {
+  color: #00bfff;
+}
+
+/* DESCRIPCIÓN */
+.description {
+  max-width: 700px;
+  margin: 0 auto 70px auto;
+  font-size: 17px;
+  line-height: 1.8;
+  color: #c9d1d9;
+}
+
+/* NIVELES */
 .levels {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 25px;
-  margin-bottom: 60px;
+  margin-bottom: 70px;
 }
 
 .card {
   background: #161b22;
-  padding: 30px;
-  border-radius: 16px;
-  width: 260px;
+  padding: 35px 25px;
+  border-radius: 18px;
+  width: 270px;
   transition: 0.3s ease;
   border: 1px solid #21262d;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
 }
 
 .card h3 {
@@ -61,37 +84,49 @@ body {
 }
 
 .card p {
-  color: #8b949e;
   font-size: 14px;
+  color: #8b949e;
 }
 
-.bronze {
-  border: 1px solid #cd7f32;
+.bronze { border: 1px solid #cd7f32; }
+.silver { border: 1px solid #c0c0c0; opacity: 0.65; }
+.gold { border: 1px solid #ffd700; opacity: 0.65; }
+
+/* BOTONES */
+.buttons {
+  margin-top: 30px;
 }
 
-.silver {
-  border: 1px solid #c0c0c0;
-  opacity: 0.6;
-}
-
-.gold {
-  border: 1px solid #ffd700;
-  opacity: 0.6;
-}
-
-.button-main {
+.button-primary {
   background: #00bfff;
   color: white;
-  padding: 14px 28px;
+  padding: 15px 32px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: bold;
-  transition: 0.3s;
+  margin: 10px;
   display: inline-block;
+  transition: 0.3s ease;
 }
 
-.button-main:hover {
+.button-primary:hover {
   background: #009acd;
+}
+
+.button-secondary {
+  background: #238636;
+  color: white;
+  padding: 15px 32px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 10px;
+  display: inline-block;
+  transition: 0.3s ease;
+}
+
+.button-secondary:hover {
+  background: #1e7c2f;
 }
 </style>
 </head>
@@ -100,35 +135,84 @@ body {
 
 <div class="container">
 
-  <img src="btcxacademy-logo.png" class="logo" alt="BTCX Academy Logo">
+  <img src="btcxacademy-logo.png" class="logo" alt="btcxacademy logo">
 
   <p class="subtitle">Educación Bitcoin práctica</p>
 
-  <div class="levels">
+  <div class="price">
+    Precio actual: <strong>1 BTCX = 0.10 USDC</strong> — Fase 1
+  </div>
 
+  <div class="description">
+    BTCX Academy es una biblioteca privada dedicada al estudio profundo de Bitcoin.
+    El acceso se obtiene manteniendo un mínimo de 2.000 BTCX en staking en la red Polygon.
+    <br><br>
+    BTCX no representa una promesa de rentabilidad, sino una llave digital de acceso a formación estructurada, análisis y contenido exclusivo.
+  </div>
+
+  <div class="levels">
     <div class="card bronze">
       <h3>🥉 Bronce</h3>
-      <p>2000 BTCX</p>
+      <p>2.000 BTCX</p>
       <p>Acceso a la biblioteca</p>
     </div>
 
     <div class="card silver">
       <h3>🥈 Plata</h3>
-      <p>5000 BTCX</p>
-      <p>Coming Soon</p>
+      <p>5.000 BTCX</p>
+      <p>Próximamente</p>
     </div>
 
     <div class="card gold">
       <h3>🥇 Oro</h3>
-      <p>10000 BTCX</p>
-      <p>Coming Soon</p>
+      <p>10.000 BTCX</p>
+      <p>Próximamente</p>
     </div>
-
   </div>
 
-  <a href="comprar.html" class="button-main">Comprar BTCX</a>
+  <div class="buttons">
+    <a href="comprar.html" class="button-secondary">Comprar BTCX</a>
+    <a href="#" onclick="connectWallet()" class="button-primary">Conectar Wallet</a>
+  </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script>
+
+const stakingAddress = "TU_DIRECCION_STAKING_AQUI";
+
+const stakingABI = [
+  "function hasAccess(address user) view returns (bool)"
+];
+
+async function connectWallet() {
+  if (!window.ethereum) {
+    alert("Necesitas MetaMask");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+  const userAddress = await signer.getAddress();
+
+  const contract = new ethers.Contract(
+    stakingAddress,
+    stakingABI,
+    provider
+  );
+
+  const access = await contract.hasAccess(userAddress);
+
+  if (access) {
+    window.location.href = "panel.html";
+  } else {
+    alert("Necesitas mínimo 2.000 BTCX en staking para acceder.");
+  }
+}
+
+</script>
 
 </body>
 </html>
