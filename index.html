@@ -1,68 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>BTCX — Biblioteca Bitcoin</title>
+<title>BTCX Academy</title>
+
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
 
-body{
-  background:#000000;
-  color:white;
-  font-family:-apple-system,BlinkMacSystemFont,Arial;
-  text-align:center;
-  padding:60px 20px;
+body {
+  margin: 0;
+  background-color: #0d1117;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-align: center;
 }
 
-.container{
-  max-width:520px;
-  margin:auto;
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 100px 20px;
 }
 
-.logo{
-  width:160px;
-  margin-bottom:30px;
-  transition: all 0.4s ease;
+.logo {
+  width: 180px;
+  margin-bottom: 40px;
 }
 
-.logo:hover{
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 12px rgba(37,99,235,0.6));
+h1 {
+  font-size: 42px;
+  font-weight: 600;
+  margin-bottom: 10px;
 }
 
-.button{
-  display:block;
-  width:100%;
-  max-width:320px;
-  margin:10px auto;
-  padding:14px;
-  border-radius:10px;
-  border:none;
-  background:#2563eb;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  text-decoration:none;
+.subtitle {
+  font-size: 20px;
+  color: #8b949e;
+  margin-bottom: 60px;
+  line-height: 1.6;
 }
 
-.secondary{
-  background:#111827;
-  color:#93c5fd;
-  border:1px solid #2563eb;
+.description {
+  font-size: 18px;
+  color: #c9d1d9;
+  line-height: 1.8;
+  margin-bottom: 70px;
 }
 
-.box{
-  background:#111827;
-  padding:18px;
-  border-radius:12px;
-  margin:25px 0;
+button {
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease;
 }
 
-.footer{
-  margin-top:90px;
-  font-size:13px;
-  color:#9ca3af;
+.connect {
+  background-color: #1f6feb;
+  color: white;
+}
+
+.connect:hover {
+  opacity: 0.85;
+}
+
+.buy {
+  background-color: #238636;
+  color: white;
+}
+
+.buy:hover {
+  opacity: 0.85;
+}
+
+footer {
+  margin-top: 120px;
+  font-size: 14px;
+  color: #6e7681;
 }
 
 </style>
@@ -72,56 +88,45 @@ body{
 
 <div class="container">
 
-<img src="btcx-logo-energia.jpeg" class="logo">
+<img src="btcx-logo-energia.jpeg" class="logo" alt="BTCX Logo">
 
-<div class="box">
-Acceso al contenido mediante staking mínimo de <strong>2.000 BTCX</strong>
+<h1>BTCX Academy</h1>
+
+<div class="subtitle">
+Educación Bitcoin práctica.<br>
+Acceso privado mediante staking on-chain.
 </div>
 
-<button class="button" onclick="connect()">Conectar wallet</button>
+<div class="description">
+BTCX Academy es un espacio privado dedicado al estudio profundo de Bitcoin.<br><br>
 
-<a class="button secondary" href="comprar.html">Comprar acceso (2000 BTCX)</a>
+El acceso se obtiene manteniendo un mínimo de 2.000 BTCX en staking en la red Polygon.<br><br>
 
-<div id="status"></div>
-
+BTCX no es una promesa de rentabilidad, sino una llave de acceso a contenido exclusivo, análisis y formación estructurada.
 </div>
 
-<footer class="footer">
-BTCX Academy — Educación Bitcoin práctica<br>
-Fundado por Joan Salvatella
+<button class="connect" onclick="connectWallet()">Conectar Wallet</button>
+<button class="buy" onclick="window.location.href='comprar.html'">
+Comprar acceso — 200 USDC
+</button>
+
+<footer>
+© BTCX Academy
 </footer>
+
+</div>
 
 <script>
 
-const stakingAddress="0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+async function connectWallet() {
+  if (!window.ethereum) {
+    alert("Necesitas MetaMask");
+    return;
+  }
 
-const stakingABI=[
- "function hasAccess(address user) view returns(bool)"
-];
-
-async function connect(){
-
- if(!window.ethereum){
-   document.getElementById("status").innerHTML="Instala MetaMask";
-   return;
- }
-
- const provider=new ethers.providers.Web3Provider(window.ethereum);
- await provider.send("eth_requestAccounts",[]);
- const signer=provider.getSigner();
- const address=await signer.getAddress();
-
- const contract=new ethers.Contract(stakingAddress,stakingABI,provider);
- const access=await contract.hasAccess(address);
-
- if(access){
-   document.getElementById("status").innerHTML=
-   "Acceso activo ✔<br><br><a href='panel.html' style='color:white;'>Entrar al panel</a>";
- }else{
-   document.getElementById("status").innerHTML=
-   "Wallet conectada pero sin staking activo.";
- }
-
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  alert("Wallet conectada correctamente.");
 }
 
 </script>
