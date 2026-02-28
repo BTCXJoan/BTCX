@@ -118,6 +118,12 @@ Comprar acceso — 200 USDC
 
 <script>
 
+const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
+
+const stakingABI = [
+  "function hasAccess(address user) view returns (bool)"
+];
+
 async function connectWallet() {
   if (!window.ethereum) {
     alert("Necesitas MetaMask");
@@ -126,7 +132,22 @@ async function connectWallet() {
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
-  alert("Wallet conectada correctamente.");
+  const signer = provider.getSigner();
+  const userAddress = await signer.getAddress();
+
+  const contract = new ethers.Contract(
+    stakingAddress,
+    stakingABI,
+    provider
+  );
+
+  const access = await contract.hasAccess(userAddress);
+
+  if (access) {
+    window.location.href = "panel.html";
+  } else {
+    alert("No tienes staking activo de 2.000 BTCX.");
+  }
 }
 
 </script>
