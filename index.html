@@ -20,27 +20,27 @@ body {
   padding: 40px 20px 60px 20px;
 }
 
-/* LOGO GRANDE */
+/* LOGO */
 .logo {
-  width: 520px;
+  width: 650px;
   max-width: 95%;
   height: auto;
   display: block;
-  margin: 80px auto 30px auto;
-  filter: drop-shadow(0 0 45px rgba(0, 170, 255, 0.45));
+  margin: 60px auto 5px auto; /* menos espacio abajo */
+  filter: drop-shadow(0 0 55px rgba(0, 170, 255, 0.45));
 }
 
-/* SUBTITULO */
+/* SUBTITULO MÁS PEGADO */
 .subtitle {
   font-size: 20px;
   color: #8b949e;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-/* TEXTO EXPLICATIVO */
+/* TEXTO */
 .description {
   max-width: 720px;
-  margin: 0 auto 60px auto;
+  margin: 0 auto 50px auto;
   font-size: 17px;
   line-height: 1.8;
   color: #c9d1d9;
@@ -50,18 +50,29 @@ body {
   color: #00bfff;
 }
 
-/* NIVELES */
+/* NIVELES CON RECUADRO */
 .levels {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  max-width: 750px;
-  margin: 0 auto 60px auto;
-  font-size: 16px;
+  align-items: stretch;
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto 50px auto;
 }
 
 .level {
   flex: 1;
+  padding: 18px;
+  border-radius: 12px;
+  background-color: #161b22;
+  border: 1px solid #21262d;
+  font-size: 15px;
+  transition: 0.3s ease;
+}
+
+.level:hover {
+  border-color: #30363d;
+  transform: translateY(-3px);
 }
 
 .bronze { color: #cd7f32; }
@@ -107,8 +118,8 @@ body {
 
 /* FOOTER */
 .footer {
-  margin-top: 100px;
-  padding: 30px 0;
+  margin-top: 90px;
+  padding: 25px 0;
   font-size: 13px;
   color: #6e7681;
   border-top: 1px solid #21262d;
