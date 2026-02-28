@@ -2,110 +2,97 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTCX Academy</title>
 
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
 <style>
-
 body {
   margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen;
   background-color: #0d1117;
-  color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: white;
   text-align: center;
 }
 
 .container {
-  max-width: 850px;
+  max-width: 1000px;
   margin: auto;
-  padding: 100px 20px;
+  padding: 40px 20px;
 }
 
 .logo {
-  width: 210px;
-  margin-bottom: 40px;
-  transition: transform 0.4s ease, filter 0.4s ease;
-}
-
-.logo:hover {
-  transform: scale(1.04);
-  filter: drop-shadow(0 0 18px rgba(0, 153, 255, 0.35));
-}
-
-h1 {
-  font-size: 42px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  width: 280px;
+  max-width: 90%;
+  height: auto;
+  display: block;
+  margin: 60px auto 20px auto;
+  filter: drop-shadow(0 0 25px rgba(0, 170, 255, 0.25));
 }
 
 .subtitle {
-  font-size: 20px;
+  font-size: 18px;
   color: #8b949e;
-  margin-bottom: 30px;
-  line-height: 1.6;
-}
-
-.price {
-  font-size: 18px;
-  color: #c9d1d9;
   margin-bottom: 60px;
 }
 
-.description {
-  font-size: 18px;
-  color: #c9d1d9;
-  line-height: 1.8;
+.levels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
   margin-bottom: 60px;
 }
 
-.tiers {
-  margin-bottom: 70px;
+.card {
+  background: #161b22;
+  padding: 30px;
+  border-radius: 16px;
+  width: 260px;
+  transition: 0.3s ease;
+  border: 1px solid #21262d;
 }
 
-.tier {
-  margin: 18px 0;
-  font-size: 18px;
+.card:hover {
+  transform: translateY(-5px);
 }
 
-.bronze { color: #cd7f32; }
-.silver { color: #c0c0c0; }
-.gold { color: #ffd700; }
-
-button {
-  padding: 14px 30px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  margin: 10px;
-  transition: all 0.3s ease;
+.card h3 {
+  margin-bottom: 10px;
 }
 
-.connect {
-  background-color: #1f6feb;
-  color: white;
-}
-
-.connect:hover {
-  opacity: 0.85;
-}
-
-.buy {
-  background-color: #238636;
-  color: white;
-}
-
-.buy:hover {
-  opacity: 0.85;
-}
-
-footer {
-  margin-top: 120px;
+.card p {
+  color: #8b949e;
   font-size: 14px;
-  color: #6e7681;
 }
 
+.bronze {
+  border: 1px solid #cd7f32;
+}
+
+.silver {
+  border: 1px solid #c0c0c0;
+  opacity: 0.6;
+}
+
+.gold {
+  border: 1px solid #ffd700;
+  opacity: 0.6;
+}
+
+.button-main {
+  background: #00bfff;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.button-main:hover {
+  background: #009acd;
+}
 </style>
 </head>
 
@@ -113,87 +100,35 @@ footer {
 
 <div class="container">
 
-<img src="btcxacademy-logo.png" class="logo" alt="BTCX Logo">
+  <img src="btcxacademy-logo.png" class="logo" alt="BTCX Academy Logo">
 
-<h1>BTCX Academy</h1>
+  <p class="subtitle">Educación Bitcoin práctica</p>
 
-<div class="subtitle">
-Educación Bitcoin práctica.<br>
-Acceso privado mediante staking on-chain.
-</div>
+  <div class="levels">
 
-<div class="price">
-Precio actual: <strong>1 BTCX = 0.10 USDC</strong> — Fase 1
-</div>
+    <div class="card bronze">
+      <h3>🥉 Bronce</h3>
+      <p>2000 BTCX</p>
+      <p>Acceso a la biblioteca</p>
+    </div>
 
-<div class="description">
-BTCX Academy es un espacio privado dedicado al estudio profundo de Bitcoin.<br><br>
+    <div class="card silver">
+      <h3>🥈 Plata</h3>
+      <p>5000 BTCX</p>
+      <p>Coming Soon</p>
+    </div>
 
-El acceso se obtiene manteniendo un mínimo de 2.000 BTCX en staking en la red Polygon.<br><br>
+    <div class="card gold">
+      <h3>🥇 Oro</h3>
+      <p>10000 BTCX</p>
+      <p>Coming Soon</p>
+    </div>
 
-BTCX no representa una promesa de rentabilidad, sino una llave digital de acceso a formación estructurada y contenido exclusivo.
-</div>
-
-<div class="tiers">
-  <div class="tier bronze">
-    🥉 Bronce — 2.000 BTCX — Acceso a la biblioteca
   </div>
 
-  <div class="tier silver">
-    🥈 Plata — 5.000 BTCX — Próximamente
-  </div>
-
-  <div class="tier gold">
-    🥇 Oro — 10.000 BTCX — Próximamente
-  </div>
-</div>
-
-<button class="connect" onclick="connectWallet()">Conectar Wallet</button>
-<button class="buy" onclick="window.location.href='comprar.html'">
-Comprar BTCX
-</button>
-
-<footer>
-© BTCX Academy
-</footer>
+  <a href="comprar.html" class="button-main">Comprar BTCX</a>
 
 </div>
-
-<script>
-
-const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-
-const stakingABI = [
-  "function hasAccess(address user) view returns (bool)"
-];
-
-async function connectWallet() {
-  if (!window.ethereum) {
-    alert("Necesitas MetaMask");
-    return;
-  }
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-  const userAddress = await signer.getAddress();
-
-  const contract = new ethers.Contract(
-    stakingAddress,
-    stakingABI,
-    provider
-  );
-
-  const access = await contract.hasAccess(userAddress);
-
-  if (access) {
-    window.location.href = "panel.html";
-  } else {
-    alert("Necesitas mínimo 2.000 BTCX en staking para acceder.");
-  }
-}
-
-</script>
 
 </body>
 </html>
