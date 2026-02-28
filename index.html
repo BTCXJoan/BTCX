@@ -17,14 +17,20 @@ body {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 850px;
   margin: auto;
   padding: 100px 20px;
 }
 
 .logo {
-  width: 180px;
+  width: 210px;
   margin-bottom: 40px;
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.logo:hover {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 18px rgba(0, 153, 255, 0.35));
 }
 
 h1 {
@@ -36,19 +42,38 @@ h1 {
 .subtitle {
   font-size: 20px;
   color: #8b949e;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   line-height: 1.6;
+}
+
+.price {
+  font-size: 18px;
+  color: #c9d1d9;
+  margin-bottom: 60px;
 }
 
 .description {
   font-size: 18px;
   color: #c9d1d9;
   line-height: 1.8;
+  margin-bottom: 60px;
+}
+
+.tiers {
   margin-bottom: 70px;
 }
 
+.tier {
+  margin: 18px 0;
+  font-size: 18px;
+}
+
+.bronze { color: #cd7f32; }
+.silver { color: #c0c0c0; }
+.gold { color: #ffd700; }
+
 button {
-  padding: 14px 28px;
+  padding: 14px 30px;
   font-size: 16px;
   border-radius: 8px;
   border: none;
@@ -97,17 +122,35 @@ Educación Bitcoin práctica.<br>
 Acceso privado mediante staking on-chain.
 </div>
 
+<div class="price">
+Precio actual: <strong>1 BTCX = 0.10 USDC</strong> — Fase 1
+</div>
+
 <div class="description">
 BTCX Academy es un espacio privado dedicado al estudio profundo de Bitcoin.<br><br>
 
 El acceso se obtiene manteniendo un mínimo de 2.000 BTCX en staking en la red Polygon.<br><br>
 
-BTCX no es una promesa de rentabilidad, sino una llave de acceso a contenido exclusivo, análisis y formación estructurada.
+BTCX no representa una promesa de rentabilidad, sino una llave digital de acceso a formación estructurada y contenido exclusivo.
+</div>
+
+<div class="tiers">
+  <div class="tier bronze">
+    🥉 Bronce — 2.000 BTCX — Acceso completo a la biblioteca
+  </div>
+
+  <div class="tier silver">
+    🥈 Plata — 5.000 BTCX — Próximamente
+  </div>
+
+  <div class="tier gold">
+    🥇 Oro — 10.000 BTCX — Próximamente
+  </div>
 </div>
 
 <button class="connect" onclick="connectWallet()">Conectar Wallet</button>
 <button class="buy" onclick="window.location.href='comprar.html'">
-Comprar acceso — 200 USDC
+Comprar BTCX
 </button>
 
 <footer>
@@ -146,7 +189,7 @@ async function connectWallet() {
   if (access) {
     window.location.href = "panel.html";
   } else {
-    alert("No tienes staking activo de 2.000 BTCX.");
+    alert("Necesitas mínimo 2.000 BTCX en staking para acceder.");
   }
 }
 
