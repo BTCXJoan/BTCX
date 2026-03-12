@@ -1,51 +1,135 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>BTCX - Capítulo 1</title>
+
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
-body { background:#0b0f1a; color:white; font-family:Arial; max-width:700px; margin:auto; padding:40px;}
-a { color:#60a5fa; }
+
+body{
+ background:#0b0f1a;
+ color:white;
+ font-family:Arial;
+ max-width:700px;
+ margin:auto;
+ padding:40px;
+}
+
+a{
+ color:#60a5fa;
+}
+
+.chapter-image{
+ width:100%;
+ max-width:750px;
+ margin:40px auto;
+ display:block;
+ border-radius:12px;
+ box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
 </style>
+
 </head>
 
 <body>
 
-<h1>Capítulo 1 — ¿Qué es Bitcoin y por qué importa?</h1>
-<p><a href="index.html">← Volver al índice</a></p>
-<div id="content"></div>
+<div id="content">
+<p>Verificando acceso...</p>
+</div>
 
 <script>
-const stakingAddress = "0xFc9016F9153D0a7e9A09DDca7Ad756F9485cEcbc";
-const stakingABI = ["function hasAccess(address user) view returns (bool)"];
 
-async function checkAccess() {
- if(!window.ethereum){ alert("Necesitas MetaMask"); return;}
+const stakingAddress = "0xfc9016f9153d0a7e9a09ddca7ad756f9485cecbc";
+
+const stakingABI = [
+ "function hasAccess(address user) view returns (bool)"
+];
+
+async function checkAccess(){
+
+ if(!window.ethereum){
+  alert("Necesitas MetaMask");
+  return;
+ }
 
  const provider = new ethers.providers.Web3Provider(window.ethereum);
+
  await provider.send("eth_requestAccounts", []);
+
  const signer = provider.getSigner();
+
  const userAddress = await signer.getAddress();
 
- const contract = new ethers.Contract(stakingAddress, stakingABI, provider);
+ const contract = new ethers.Contract(
+  stakingAddress,
+  stakingABI,
+  provider
+ );
+
  const access = await contract.hasAccess(userAddress);
 
  if(access){
+
  document.getElementById("content").innerHTML = `
- <p>Bitcoin es un sistema de dinero digital descentralizado que permite transferir valor sin intermediarios.</p>
- <p>No pertenece a ninguna empresa ni gobierno.</p>
- <p>Su oferta está limitada a 21 millones.</p>
- <br>
- <a href="capitulo2.html">Siguiente capítulo →</a>
- `;
- } else {
- document.getElementById("content").innerHTML = "<p>Acceso no activo.</p>";
+
+<h1>Capítulo 1</h1>
+<h2>Qué es Bitcoin y por qué importa</h2>
+
+<img src="img/historia-dinero.jpg" class="chapter-image">
+
+<p>
+Durante miles de años las sociedades humanas han necesitado una herramienta para intercambiar valor. A esa herramienta la llamamos dinero.
+</p>
+
+<p>
+El dinero ha adoptado muchas formas a lo largo de la historia: conchas, metales preciosos, monedas acuñadas o billetes emitidos por gobiernos.
+</p>
+
+<img src="img/inflacion.jpg" class="chapter-image">
+
+<p>
+En el sistema financiero actual los bancos centrales pueden crear dinero cuando lo consideran necesario.
+</p>
+
+<p>
+Cuando la creación de dinero supera el crecimiento real de la economía aparece la inflación.
+</p>
+
+<img src="img/bitcoin-red.jpg" class="chapter-image">
+
+<p>
+En 2009 apareció una idea completamente diferente: Bitcoin.
+</p>
+
+<p>
+Por primera vez en la historia existía un sistema monetario digital que no pertenecía a ningún país ni a ningún banco.
+</p>
+
+<br><br>
+
+<a href="capitulo2.html">Siguiente capítulo →</a>
+
+`;
+
  }
+
+ else{
+
+ document.getElementById("content").innerHTML = `
+ <h2>Acceso no activo</h2>
+ <p>Necesitas mínimo 2.000 BTCX en staking.</p>
+ `;
+
+ }
+
 }
 
 checkAccess();
+
 </script>
 
 </body>
