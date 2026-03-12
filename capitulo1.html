@@ -31,11 +31,23 @@ a{
  box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
+#progress-bar{
+position:fixed;
+top:0;
+left:0;
+height:4px;
+background:#f7931a;
+width:0%;
+z-index:999;
+}
+
 </style>
 
 </head>
 
 <body>
+
+<div id="progress-bar"></div>
 
 <div id="content">
 <p>Verificando acceso...</p>
@@ -86,114 +98,69 @@ Tiempo de lectura: 4 minutos
 
 <p>
 Durante miles de años, las sociedades humanas han necesitado una herramienta para intercambiar valor. A esa herramienta la llamamos dinero.
-<p>
+</p>
 
 <p>
-Antes de que existiera el dinero moderno, las personas intercambiaban bienes directamente. Este sistema, conocido como trueque, tenía un gran problema: era difícil encontrar a alguien que quisiera exactamente lo que tú ofrecías y que al mismo tiempo tuviera lo que tú necesitabas.
-<p>
+Antes de que existiera el dinero moderno, las personas intercambiaban bienes directamente. Este sistema, conocido como trueque, tenía un gran problema: era difícil encontrar a alguien que quisiera exactamente lo que tú ofrecías.
+</p>
 
 <p>
-Para solucionar este problema, las civilizaciones empezaron a utilizar objetos que todos aceptaban como medio de intercambio. En diferentes lugares del mundo se utilizaron conchas, sal, ganado o metales preciosos.
-<p>
+Para solucionar este problema, las civilizaciones empezaron a utilizar objetos que todos aceptaban como medio de intercambio.
+</p>
 
 <p>
-Con el tiempo, los metales como el oro y la plata se convirtieron en la forma de dinero más común. Eran duraderos, divisibles y relativamente escasos, lo que los hacía adecuados para almacenar valor.
-<p>
-
-<p>
-Con la evolución de los estados modernos aparecieron las monedas acuñadas y más tarde los billetes emitidos por gobiernos y bancos centrales. Estos billetes representaban inicialmente una cantidad de oro almacenada en un banco.
-<p>
-
-<p>
-Sin embargo, con el paso del tiempo el sistema cambió. Hoy en día, la mayoría del dinero que utilizamos no está respaldado por ningún metal precioso. Es simplemente dinero emitido por los bancos centrales de cada país.
+Con el tiempo, los metales como el oro y la plata se convirtieron en la forma de dinero más común.
 </p>
 
 <img src="img/inflacion.jpg" class="chapter-image">
 
 <p>
 En el sistema financiero actual, los bancos centrales tienen la capacidad de crear nuevo dinero.
-<p>
+</p>
 
 <p>
-Esto puede hacerse por diferentes motivos: estimular la economía, financiar gasto público o responder a crisis económicas.
-<p>
-
-<p>
-El problema aparece cuando la creación de dinero aumenta más rápido que la producción de bienes y servicios en la economía. Cuando esto ocurre, el valor del dinero tiende a disminuir con el tiempo.
-<p>
+El problema aparece cuando la creación de dinero aumenta más rápido que la producción de bienes y servicios en la economía.
+</p>
 
 <p>
 Este fenómeno se conoce como inflación.
-<p>
+</p>
 
 <p>
-La inflación significa que el dinero pierde poder adquisitivo. En otras palabras, cada año necesitas más dinero para comprar exactamente lo mismo.
-<p>
-
-<p>
-Muchas personas aceptan este sistema como algo normal porque siempre ha funcionado de esta manera. Sin embargo, cada vez más personas se preguntan si es posible imaginar un sistema monetario diferente.
-<p>
-
-<p>
-Un sistema donde el dinero no pueda ser creado arbitrariamente.
+La inflación significa que el dinero pierde poder adquisitivo.
 </p>
 
 <img src="img/bitcoin-red.jpg" class="chapter-image">
 
 <p>
 En 2009 apareció una idea radicalmente nueva.
-<p>
+</p>
 
 <p>
 Un desarrollador —o grupo de desarrolladores— bajo el pseudónimo de Satoshi Nakamoto publicó un software que permitía crear una nueva forma de dinero digital llamada Bitcoin.
-<p>
+</p>
 
 <p>
 Bitcoin introdujo una innovación fundamental: un sistema monetario que no depende de ningún gobierno, banco o empresa.
-<p>
+</p>
 
 <p>
-En lugar de confiar en una institución central, Bitcoin funciona gracias a una red global de ordenadores que verifican las transacciones mediante criptografía.
-<p>
-
-<p>
-Todas las transacciones se registran en una base de datos pública llamada blockchain. Esta base de datos es compartida por miles de nodos alrededor del mundo, lo que hace extremadamente difícil manipular la información.
-<p>
+Todas las transacciones se registran en una base de datos pública llamada blockchain.
+</p>
 
 <p>
 Pero una de las características más importantes de Bitcoin es su escasez programada.
-<p>
+</p>
 
 <p>
-El protocolo establece que nunca existirán más de 21 millones de bitcoins. Esta limitación no puede ser modificada fácilmente porque forma parte del propio diseño del sistema.
-<p>
-
-<p>
-Por primera vez en la historia existe un activo digital que es escaso por diseño.
-<p>
-
-<p>
-Bitcoin no es simplemente una nueva forma de pagar en internet.
-<p>
-
-<p>
-Para algunas personas representa una innovación tecnológica.
-Para otras, una alternativa al sistema financiero tradicional.
-<p>
-
-<p>
-Pero, sobre todo, Bitcoin es una nueva forma de pensar el dinero.
-<p>
-
-<p>
-Comprender Bitcoin no significa necesariamente utilizarlo inmediatamente. Significa entender una de las ideas económicas y tecnológicas más importantes del siglo XXI.
-<p>
-
-<p>
-Y ese es precisamente el objetivo de BTCX Academy: ofrecer una forma clara y estructurada de comprender Bitcoin desde sus fundamentos.
-<p>
+El protocolo establece que nunca existirán más de 21 millones de bitcoins.
+</p>
 
 <br><br>
+
+<a href="panel.html">← Volver al índice</a>
+
+&nbsp;&nbsp;&nbsp;
 
 <a href="capitulo2.html">Siguiente capítulo →</a>
 
@@ -203,7 +170,7 @@ Y ese es precisamente el objetivo de BTCX Academy: ofrecer una forma clara y est
 
  else{
 
-  document.getElementById("content").innerHTML = `
+ document.getElementById("content").innerHTML = `
  <h2>Acceso no activo</h2>
  <p>Necesitas mínimo 2.000 BTCX en staking.</p>
  `;
@@ -213,6 +180,21 @@ Y ese es precisamente el objetivo de BTCX Academy: ofrecer una forma clara y est
 }
 
 checkAccess();
+
+</script>
+
+<script>
+
+window.addEventListener("scroll", function(){
+
+const scrollTop = document.documentElement.scrollTop;
+const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+const progress = (scrollTop / scrollHeight) * 100;
+
+document.getElementById("progress-bar").style.width = progress + "%";
+
+});
 
 </script>
 
